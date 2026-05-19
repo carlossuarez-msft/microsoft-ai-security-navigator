@@ -78,6 +78,20 @@ export const sources: SourceRef[] = [
     note: 'The capability table marks DSPM / Audit / Classification / DLP / IRM / Comm Compliance / eDiscovery / Data Lifecycle Management as supported, but Comm Compliance, eDiscovery, and Retention all require Edge browser AND are restricted to ChatGPT, Microsoft Chat (consumer version), Google Gemini, and DeepSeek. Claude is excluded from all three.',
   },
   {
+    id: 'purview-supported-sites',
+    title: 'Microsoft Purview \u2014 supported sites for Other AI apps',
+    url: 'https://learn.microsoft.com/en-us/purview/ai-microsoft-purview-supported-sites',
+    status: 'Official docs',
+    note: 'Purview "Other AI apps" controls (DSPM, classification, DLP, IRM, Audit, etc.) apply only when the third-party AI surface is on this supported-sites list.',
+  },
+  {
+    id: 'apim-ai-gateway',
+    title: 'Azure API Management \u2014 GenAI gateway capabilities',
+    url: 'https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities',
+    status: 'Official docs',
+    note: 'APIM acts as an AI gateway fronting Azure OpenAI / Foundry endpoints for token rate limiting, key rotation, subscription quotas, and Sentinel logging.',
+  },
+  {
     id: 'audit-copilot',
     title: 'Audit logs for Copilot and AI applications',
     url: 'https://learn.microsoft.com/en-us/purview/audit-copilot',

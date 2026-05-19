@@ -2,7 +2,7 @@ export type Status = 'GA' | 'Preview' | 'Validate'
 
 export type ControlType = 'Prevent' | 'Detect' | 'Respond' | 'Govern' | 'Measure'
 
-export type PlatformKind = 'microsoft' | 'openai' | 'anthropic' | 'custom'
+export type PlatformKind = 'microsoft' | 'openai' | 'anthropic' | 'custom' | 'saas'
 
 export interface PlaybookStep {
   tool: string
@@ -10,6 +10,11 @@ export interface PlaybookStep {
   status?: Status
   caveat?: string
   gaDate?: string
+  /**
+   * Optional allow-list of workloads this step applies to. If unset or empty,
+   * the step applies to every workload the parent platform appears in.
+   */
+  appliesToWorkloads?: WorkloadCategory[]
 }
 
 export interface PlatformPlaybook {
@@ -30,6 +35,11 @@ export interface Platform {
   playbook: PlatformPlaybook
   gaps: Gap[]
   sourceIds: string[]
+  /**
+   * Explicit allow-list of workloads this platform belongs in. Authoritative —
+   * used by Step 2 to filter the platform picker and by Step 3 to scope the plan.
+   */
+  applicableWorkloads: WorkloadCategory[]
 }
 
 export interface SourceRef {
@@ -168,6 +178,11 @@ export interface Gap {
   suggestion: string
   layer?: Layer
   compensatingVendors?: string[]
+  /**
+   * Optional allow-list of workloads this gap applies to. If unset or empty,
+   * the gap applies to every workload the parent platform appears in.
+   */
+  appliesToWorkloads?: WorkloadCategory[]
 }
 
 export interface Coverage {

@@ -9,6 +9,7 @@ import type {
   ToolCoverage,
   UseCase,
   Workload,
+  WorkloadCategory,
 } from '../types/content'
 import { useCases } from './useCases'
 
@@ -621,17 +622,23 @@ export function getPrimaryLayers(useCase: UseCase): Layer[] {
 }
 
 // Workload-level coverage: same 7-layer plan, driven by platform.playbook only.
-// The use-case-to-lane map is collapsed to the union across every child use case.
+// Steps are filtered by `appliesToWorkloads` so each workload gets a plan
+// scoped to that workload's defense-in-depth needs, not the union across the
+// platform's entire surface area.
 export function getLayeredCoverageForWorkload(workload: Workload, platform: Platform): LayeredCoverage {
-  if (!workload.applicablePlatformKinds.includes(platform.kind)) {
+  if (!platform.applicableWorkloads.includes(workload.id)) {
     return { layers: layerOrder.map((l) => ({ layer: l, tools: [], gaps: [] })) }
   }
+
+  const stepAppliesToWorkload = (appliesTo?: WorkloadCategory[]) =>
+    !appliesTo || appliesTo.length === 0 || appliesTo.includes(workload.id)
 
   const tools: ToolCoverage[] = []
   for (const lane of ALL_LANES) {
     const steps = platform.playbook[lane] ?? []
     for (const step of steps) {
       if (/^compensating control/i.test(step.tool)) continue
+      if (!stepAppliesToWorkload(step.appliesToWorkloads)) continue
       tools.push({
         microsoftTool: step.tool,
         whatItControls: step.action,
@@ -643,7 +650,10 @@ export function getLayeredCoverageForWorkload(workload: Workload, platform: Plat
   }
 
   const gapMap = new Map<string, Gap>()
-  for (const g of platform.gaps) gapMap.set(g.gap, { ...g })
+  for (const g of platform.gaps) {
+    if (!stepAppliesToWorkload(g.appliesToWorkloads)) continue
+    gapMap.set(g.gap, { ...g })
+  }
   // Layer on any explicit per-(use-case, platform) gap overrides from child use cases —
   // they are more specific guidance than the generic platform gap.
   for (const ucId of workload.useCaseIds) {

@@ -6,7 +6,7 @@ import {
   layerLabel,
   layerSubtitle,
 } from '../data/coverageMatrix'
-import { workloadStep2Heading } from '../data/workloads'
+import { platformsForWorkload, workloadStep2Heading } from '../data/workloads'
 import { StatusPill } from './StatusPill'
 import { SourceBadge } from './SourceBadge'
 
@@ -29,13 +29,14 @@ interface WizardProps {
   learnMore?: React.ReactNode
 }
 
-const kindOrder: PlatformKind[] = ['microsoft', 'openai', 'anthropic', 'custom']
+const kindOrder: PlatformKind[] = ['microsoft', 'openai', 'anthropic', 'custom', 'saas']
 
 const kindLabel: Record<PlatformKind, string> = {
   microsoft: 'Microsoft',
   openai: 'OpenAI',
   anthropic: 'Anthropic',
   custom: 'Custom on Azure',
+  saas: 'SaaS apps with embedded AI',
 }
 
 const coverageLabel: Record<Platform['microsoftCoverage'], string> = {
@@ -79,7 +80,11 @@ export function Wizard(props: WizardProps) {
 
   const platformsForStep2 = useMemo(() => {
     if (!selectedWorkload) return []
-    return platforms.filter((p) => selectedWorkload.applicablePlatformKinds.includes(p.kind))
+    // Authoritative: filter platforms by the workload×platform allow-list, not
+    // by the legacy PlatformKind union (which was over-permissive).
+    return platformsForWorkload(selectedWorkload.id).filter((p) =>
+      platforms.some((pp) => pp.id === p.id),
+    )
   }, [platforms, selectedWorkload])
 
   const platformsByKind = useMemo(() => {

@@ -81,7 +81,7 @@ function App() {
     setSelectedWorkloadId(id)
     // If the previously chosen platform is no longer applicable to the new workload, clear it.
     const wl = workloadById[id]
-    if (wl && selectedPlatform && !wl.applicablePlatformKinds.includes(selectedPlatform.kind)) {
+    if (wl && selectedPlatform && !selectedPlatform.applicableWorkloads.includes(wl.id)) {
       setSelectedPlatformId(null)
     }
     setStep(2)

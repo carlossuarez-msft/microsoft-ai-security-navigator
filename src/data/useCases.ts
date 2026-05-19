@@ -253,8 +253,8 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Make sure sensitive data is identified and labeled before Copilot, RAG, or a fine-tune ever sees it.',
     longDescription:
-      'Sensitivity labels and encryption are enforced for Microsoft 365 Copilot. For Foundry / Azure OpenAI grounding, apply Defender for Cloud sensitive-data discovery on source stores and Purview classification. For third-party AI surfaces, Purview classification works on captured prompts but does not enforce a label.',
-    applicablePlatformKinds: ['microsoft', 'custom', 'openai', 'anthropic'],
+      'Sensitivity labels and encryption are enforced for Microsoft 365 Copilot. For Foundry / Azure OpenAI grounding, apply Defender for Cloud sensitive-data discovery on source stores and Purview classification.',
+    applicablePlatformKinds: ['microsoft', 'custom', 'anthropic'],
   },
   {
     id: 'data-protect-finetune',
@@ -264,8 +264,8 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Lock down the training corpus, vector index, and fine-tune artifacts so they cannot be exfiltrated or poisoned.',
     longDescription:
-      'Treat the dataset and the resulting model weights as crown-jewel data: Defender for Storage on the source containers, customer-managed keys on the index, Entra-scoped access, and audit on all read/write paths. Microsoft has no first-party data-poisoning detector — manual data-quality review still applies.',
-    applicablePlatformKinds: ['custom', 'openai', 'anthropic'],
+      'Treat the dataset and the resulting model weights as crown-jewel data: Defender for Storage on the source containers, customer-managed keys on the index, Entra-scoped access, and audit on all read/write paths. Microsoft has no first-party data-poisoning detector — manual data-quality review still applies. Note: fine-tuning of third-party hosted models (Anthropic, direct OpenAI) is outside Microsoft\u2019s coverage; this use case targets Microsoft-hosted (Foundry / Azure OpenAI) and custom-built training pipelines.',
+    applicablePlatformKinds: ['microsoft', 'custom'],
   },
 
   // ---------- Protect against Shadow / Unsanctioned AI ----------
@@ -278,7 +278,7 @@ export const useCases: UseCase[] = [
       'Find which AI tools users and apps are actually reaching from your tenant — browser, desktop, and personal account.',
     longDescription:
       'Entra Global Secure Access Shadow AI discovery explicitly identifies ChatGPT, Claude SaaS, SaaS MCP servers, the Anthropic Claude API, and DeepSeek. Defender for Cloud Apps surfaces Generative AI category usage with a risk score. Desktop apps and personal-account usage still depend on Defender for Endpoint and network egress visibility.',
-    applicablePlatformKinds: ['openai', 'anthropic', 'custom'],
+    applicablePlatformKinds: ['openai', 'anthropic', 'custom', 'saas'],
   },
 
   // ---------- Protect against AI-Generated Threats to your users ----------
@@ -315,7 +315,7 @@ export const useCases: UseCase[] = [
       'Show auditors and the board which Microsoft controls satisfy which AI framework objectives.',
     longDescription:
       'Microsoft Purview Compliance Manager ships templates and assessments for NIST AI RMF, ISO/IEC 42001, and the EU AI Act, and tracks evidence against the Microsoft controls you have implemented.',
-    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
+    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom', 'saas'],
   },
   {
     id: 'govern-audit-lifecycle',
@@ -326,6 +326,6 @@ export const useCases: UseCase[] = [
       'One audit, retention, and investigation surface across Copilot, ChatGPT, Claude, custom apps, and agents.',
     longDescription:
       'Microsoft 365 Unified Audit records AIAppInteraction, AIApp, and ConnectedAiAppInteraction events. Copilot audit is included; non-Microsoft AI audit uses pay-as-you-go billing with 180-day retention. Coverage of prompt content for "Other AI apps" depends on the Edge browser extension reaching the app. Pair with Purview Data Lifecycle Management and eDiscovery.',
-    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
+    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom', 'saas'],
   },
 ]

@@ -1,4 +1,5 @@
-import type { PlatformKind, UseCase, Workload, WorkloadCategory } from '../types/content'
+import type { PlatformKind, Platform, UseCase, Workload, WorkloadCategory } from '../types/content'
+import { platforms } from './platforms'
 import { useCases } from './useCases'
 
 // Canonical display order for the 12 AI workloads. Used by the wizard Step 1
@@ -88,6 +89,11 @@ function buildWorkloads(): Workload[] {
     const children = byCat.get(wl) ?? []
     if (children.length === 0) continue
 
+    // Skip workloads that, after the platform.applicableWorkloads matrix is
+    // applied, have zero platforms. Prevents Step 1 from offering a dead-end tile.
+    const platformsForCat = platforms.filter((p) => p.applicableWorkloads.includes(wl))
+    if (platformsForCat.length === 0) continue
+
     const kinds = new Set<PlatformKind>()
     const sources = new Set<string>()
     const concerns: string[] = []
@@ -121,3 +127,13 @@ export const workloadById: Record<string, Workload> = workloads.reduce(
   },
   {} as Record<string, Workload>,
 )
+
+/**
+ * Authoritative Step-2 platform lookup. Returns only platforms whose
+ * `applicableWorkloads` array includes the given workload id. Use this instead
+ * of the legacy `applicablePlatformKinds` kind union, which over-matches
+ * (e.g. would surface end-user chat assistants under "Protect AI Agents").
+ */
+export function platformsForWorkload(workloadId: WorkloadCategory): Platform[] {
+  return platforms.filter((p) => p.applicableWorkloads.includes(workloadId))
+}
