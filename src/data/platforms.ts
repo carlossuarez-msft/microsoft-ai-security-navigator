@@ -147,7 +147,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage policy template',
           action: 'Detect risky AI usage patterns: browsing to GenAI sites, prompts and AI responses containing sensitive information in Microsoft 365 Copilot, Microsoft Copilot, and agents.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'data', 'ai-threats'],
+          appliesToWorkloads: ['chat', 'data', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Purview Communication Compliance - Copilot interactions template',
@@ -289,7 +289,7 @@ export const platforms: Platform[] = [
           tool: 'Power Platform admin center: environments and agent inventory',
           action: 'Inventory environments, agents, and connector usage across the tenant.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'plugins'],
+          appliesToWorkloads: ['agents', 'plugins', 'govern'],
         },
         {
           tool: 'Copilot Studio MCP server inventory (Tools \u2192 MCP onboarding wizard)',
@@ -304,7 +304,7 @@ export const platforms: Platform[] = [
           action: 'Give every Copilot Studio agent a first-class Entra identity (GA since 1 May 2026).',
           status: 'GA',
           gaDate: '2026-05-01',
-          appliesToWorkloads: ['agents'],
+          appliesToWorkloads: ['agents', 'govern'],
         },
         {
           tool: 'Microsoft Entra Conditional Access on agent identities and Power Platform',
@@ -398,7 +398,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage',
           action: 'Detect risky prompt patterns and unethical-behavior signals from Copilot Studio agents.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'data', 'ai-threats', 'plugins'],
+          appliesToWorkloads: ['agents', 'data', 'ai-threats', 'plugins', 'govern'],
         },
         {
           tool: 'Microsoft Defender for Cloud Apps - real-time agent protection during runtime',
@@ -768,14 +768,14 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender for Cloud - multi-cloud AWS connector (when Claude Code routes via Bedrock)',
           action: 'If routing Claude Code via Amazon Bedrock, connect the AWS account to Defender for Cloud for CSPM/CWP visibility over Bedrock model invocations and the surrounding AWS posture.',
           status: 'GA',
-          caveat: 'Only applicable if the customer routes Claude Code via Amazon Bedrock instead of api.anthropic.com.',
+          caveat: 'Only applicable if you route Claude Code via Amazon Bedrock instead of api.anthropic.com.',
           appliesToWorkloads: ['coding', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Sentinel - AWS CloudTrail connector (Bedrock invocations)',
           action: 'If routing via Bedrock, ingest AWS CloudTrail (which records Bedrock InvokeModel events for Claude family models) into Sentinel for correlation with Entra sign-ins and endpoint signals.',
           status: 'GA',
-          caveat: 'Only applicable if the customer routes Claude Code via Amazon Bedrock; admin-plane/invocation events only, prompt content is not in CloudTrail.',
+          caveat: 'Only applicable if you route Claude Code via Amazon Bedrock; admin-plane/invocation events only, prompt content is not in CloudTrail.',
           appliesToWorkloads: ['coding', 'ai-threats', 'govern'],
         },
         {
@@ -1788,7 +1788,7 @@ export const platforms: Platform[] = [
           action: 'Treat risky ChatGPT activity (e.g., sensitive paste from a leaver) as an insider-risk signal.',
           status: 'GA',
           caveat: 'Requires the OpenAI Compliance API connector scan + the "DSPM for AI - Capture interactions for enterprise AI apps" collection policy. The Risky AI usage template alone (without the connector) only catches browser-discovery side.',
-          appliesToWorkloads: ['chat', 'ai-threats'],
+          appliesToWorkloads: ['chat', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Purview Communication Compliance',
@@ -1985,7 +1985,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage policy template',
           action: 'Auto-detect risky ChatGPT (consumer) activity (e.g., sensitive paste from a leaver) from the browser-captured signal.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'ai-threats'],
+          appliesToWorkloads: ['chat', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Purview Communication Compliance - Other AI apps',
@@ -2328,7 +2328,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management',
           action: 'Use Endpoint DLP and file-activity signals as inputs to insider-risk policies.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'shadow'],
+          appliesToWorkloads: ['chat', 'shadow', 'govern'],
         },
       ],
       govern: [
@@ -2845,8 +2845,8 @@ export const platforms: Platform[] = [
           tool: 'Defender CSPM - AI security posture for Azure OpenAI deployments',
           action: 'Inventory Azure OpenAI accounts, deployments, AI BOM, exposed grounding data, and attack paths through Defender CSPM AI-SPM.',
           status: 'GA',
-          caveat: 'Some agent-discovery sub-capabilities surfaced under AI-SPM remain Preview.',
-          appliesToWorkloads: ['infra', 'apis', 'apps'],
+          caveat: 'Some agent-discovery sub-capabilities surfaced under AI-SPM remain Preview. AI BOM covers Azure OpenAI + Foundry GA; AWS Bedrock + GCP Vertex AI are Preview.',
+          appliesToWorkloads: ['infra', 'apis', 'apps', 'govern'],
         },
       ],
       accessControl: [
@@ -2932,13 +2932,13 @@ export const platforms: Platform[] = [
           action: 'Apply Azure Policy initiatives to deny public network access, enforce CMK, and require managed identity on Cognitive Services accounts.',
           status: 'GA',
           caveat: 'Validate the exact policy alias names on the current Microsoft Learn policy reference page.',
-          appliesToWorkloads: ['infra', 'apis', 'apps'],
+          appliesToWorkloads: ['infra', 'apis', 'apps', 'govern'],
         },
         {
           tool: 'Defender CSPM AI-SPM governance',
           action: 'Use AI-SPM recommendations and attack-path findings to govern Azure OpenAI deployments alongside the broader Defender for Cloud regulatory compliance dashboard.',
           status: 'GA',
-          appliesToWorkloads: ['infra', 'apis', 'apps'],
+          appliesToWorkloads: ['infra', 'apis', 'apps', 'govern'],
         },
       ],
     },
@@ -3714,7 +3714,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage',
           action: 'Detect risky prompt patterns and policy-violating behavior against declarative agents.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'ai-threats', 'plugins'],
+          appliesToWorkloads: ['agents', 'ai-threats', 'plugins', 'govern'],
         },
         {
           tool: 'Microsoft Defender XDR + Sentinel',
@@ -4054,7 +4054,7 @@ export const platforms: Platform[] = [
       'User-built Custom GPTs that invoke external HTTP APIs ("Actions"). Microsoft tenant-side coverage is bounded by what Microsoft Purview\u2019s Other-AI-apps capability table enables for chatgpt.com (DSPM, Classification, DLP, Insider Risk, Communication Compliance, eDiscovery, Retention) and by the supported-sites list - `*.chatgpt.com` is explicitly listed. Communication Compliance, eDiscovery, and Retention specifically require Microsoft Edge browser sessions on the supported sites per Microsoft Learn `ai-other-apps`. Microsoft Entra Global Secure Access Shadow AI Discovery names ChatGPT in its AI category.',
     microsoftCoverage: 'Low',
     nativeControls: [
-      'OpenAI workspace-side Custom GPT management and Actions configuration (vendor-side); Custom GPTs are hosted in OpenAI tenancy and their Action HTTP egress originates in OpenAI infrastructure rather than the customer tenant network [Vendor - validate]',
+      'OpenAI workspace-side Custom GPT management and Actions configuration (vendor-side); Custom GPTs are hosted in OpenAI tenancy and their Action HTTP egress originates in OpenAI infrastructure rather than your tenant network [Vendor - validate]',
       'OpenAI Compliance API for prompt/response ingestion (ChatGPT Enterprise and Edu only; not Business / Pro / Plus / consumer) [Vendor - validate]',
       'No Microsoft tenant control plane for the Custom GPT runtime or its Action HTTP egress',
     ],
@@ -4136,7 +4136,7 @@ export const platforms: Platform[] = [
           action: 'Detect risky prompt patterns to GenAI websites including ChatGPT.',
           status: 'GA',
           caveat: 'Microsoft Purview Communication Compliance, eDiscovery, and Retention for "Other AI apps" require Microsoft Edge browser sessions on supported sites.',
-          appliesToWorkloads: ['plugins', 'data', 'ai-threats'],
+          appliesToWorkloads: ['plugins', 'data', 'ai-threats', 'govern'],
         },
       ],
       monitorRespond: [
@@ -4276,7 +4276,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender for Cloud (CSPM): cloud security explorer',
           action: 'Discover Foundry-hosted AI workloads, AI BOM components, and risky combinations across the Azure estate.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'apps', 'infra', 'apis'],
+          appliesToWorkloads: ['agents', 'apps', 'infra', 'apis', 'govern'],
         },
         {
           tool: 'Microsoft Defender CSPM: AI agent discovery (Preview)',
@@ -4306,7 +4306,7 @@ export const platforms: Platform[] = [
         },
         {
           tool: 'Azure Private Endpoint + VNet isolation for Foundry',
-          action: 'Force agent inbound and outbound traffic through private endpoints; isolate Foundry agent runtime in a customer VNet.',
+          action: 'Force agent inbound and outbound traffic through private endpoints; isolate Foundry agent runtime in your VNet.',
           status: 'GA',
           appliesToWorkloads: ['agents', 'infra', 'apps', 'apis'],
         },
@@ -5331,7 +5331,8 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender for Cloud - AI security posture (multi-cloud)',
           action: 'Defender CSPM AI security posture discovers AI workloads across Azure, AWS Bedrock, and GCP Vertex AI; surfaces AI BOM components, attack paths, and posture findings for Vertex AI control-plane resources.',
           status: 'GA',
-          appliesToWorkloads: ['apis', 'apps'],
+          caveat: 'AI BOM coverage: Azure OpenAI + Foundry GA; AWS Bedrock + GCP Vertex AI Preview.',
+          appliesToWorkloads: ['apis', 'apps', 'govern'],
         },
         {
           tool: 'Microsoft Defender XDR - AI agent inventory',
@@ -5486,9 +5487,10 @@ export const platforms: Platform[] = [
         {
           tool: 'Microsoft Entra Agent ID',
           action: 'Give each Microsoft Foundry, Copilot Studio, and Agent-365-registered agent its own first-class identity. Agent 365 + Entra Agent ID is GA for Foundry agents since 2026-05-01.',
-          status: 'Validate',
+          status: 'GA',
+          gaDate: '2026-05-01',
           caveat: 'Microsoft-platform-scoped (Foundry, Copilot Studio, Agent 365 listed partners). Agents on OpenAI Agents SDK, Anthropic, LangChain, or custom AKS do NOT receive Entra Agent ID today and must reuse app registrations + WIF.',
-          appliesToWorkloads: ['agents', 'apis'],
+          appliesToWorkloads: ['agents', 'apis', 'govern'],
         },
         {
           tool: 'Microsoft Entra app registrations + Workload Identity Federation',
@@ -5544,7 +5546,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview DSPM for AI / Purview for Agent 365',
           action: 'Apply the Agent 365 Purview AI control set (DSPM for AI, Classification, Sensitivity Labels, DLP, Insider Risk Management, Communication Compliance, eDiscovery, Retention) to agents inventoried in Agent 365 - covers agent prompts / responses.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'apis', 'plugins'],
+          appliesToWorkloads: ['agents', 'apis', 'plugins', 'govern'],
         },
         {
           tool: 'Microsoft Defender for Cloud sensitive-data discovery',
@@ -7445,7 +7447,7 @@ export const platforms: Platform[] = [
           action: 'Use SaaS-AI signals (when surfaced via the Purview browser extension on Edge) as inputs to Risky AI usage policies.',
           status: 'GA',
           caveat: 'Coverage limited to Edge browser sessions.',
-          appliesToWorkloads: ['saas-embedded'],
+          appliesToWorkloads: ['saas-embedded', 'govern'],
         },
       ],
       govern: [
