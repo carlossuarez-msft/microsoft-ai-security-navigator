@@ -141,19 +141,19 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Audit (Standard) + Activity Explorer (AI activities tab)',
           action: 'Search Copilot prompts and responses; correlate to accessed files and labels. AppIdentity Copilot.MicrosoftCopilot.Microsoft365Copilot, RecordType CopilotInteraction.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'govern'],
+          appliesToWorkloads: ['chat', 'data', 'govern'],
         },
         {
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage policy template',
           action: 'Detect risky AI usage patterns: browsing to GenAI sites, prompts and AI responses containing sensitive information in Microsoft 365 Copilot, Microsoft Copilot, and agents.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'ai-threats'],
+          appliesToWorkloads: ['chat', 'data', 'ai-threats'],
         },
         {
           tool: 'Microsoft Purview Communication Compliance - Copilot interactions template',
           action: 'Detect Microsoft 365 Copilot and Copilot Chat interactions matching Prompt Shields, Protected material classifiers, and unethical-behavior signals. Review and remediate from Communication Compliance (NOT Insider Risk Management).',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'govern'],
+          appliesToWorkloads: ['chat', 'data', 'govern'],
         },
         {
           tool: 'Microsoft Defender XDR + Microsoft Sentinel + Microsoft Security Copilot',
@@ -167,13 +167,13 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview eDiscovery (Premium)',
           action: 'Search, hold, and produce Copilot interactions for regulatory or legal cases.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'govern'],
+          appliesToWorkloads: ['chat', 'data', 'govern'],
         },
         {
           tool: 'Microsoft Purview Data Lifecycle Management (retention)',
           action: 'Retain Copilot interactions per regulatory requirements.',
           status: 'GA',
-          appliesToWorkloads: ['chat', 'govern'],
+          appliesToWorkloads: ['chat', 'data', 'govern'],
         },
         {
           tool: 'Microsoft Agent 365',
@@ -219,6 +219,14 @@ export const platforms: Platform[] = [
         suggestion: 'In the M365 admin center, scope Copilot Chat (no-license) to a pilot or governance-approved group; pair with Acceptable-use policy guidance for users without paid Copilot.',
         layer: 'govern',
         appliesToWorkloads: ['chat', 'govern'],
+      },
+      {
+        gap: 'Microsoft 365 Copilot has no tenant-configurable runtime prompt/response inspection surface - Azure AI Content Safety / Prompt Shields run server-side in Microsoft\u2019s service mesh and expose no knobs for custom safety policies, prompt-injection rule tuning, or per-prompt content scanning at the application layer.',
+        compensatingControl: 'third-party',
+        suggestion: 'Where contractual reliance on Microsoft\u2019s server-side safety stack is insufficient, deploy a third-party AI runtime gateway / prompt firewall in front of the user endpoint or via Microsoft Purview Communication Compliance signal export to inspect prompts and responses for sensitive content, jailbreak attempts, and policy violations.',
+        layer: 'app',
+        compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
+        appliesToWorkloads: ['chat', 'data', 'ai-threats'],
       },
     ],
     sourceIds: [
@@ -355,8 +363,8 @@ export const platforms: Platform[] = [
           appliesToWorkloads: ['agents', 'plugins'],
         },
         {
-          tool: 'Microsoft Defender for Endpoint - web content filtering',
-          action: 'Block or warn on the Artificial Intelligence / Generative AI category for unmanaged Copilot Studio surfaces from managed endpoints.',
+          tool: 'Microsoft Defender for Endpoint - custom URL / domain indicators',
+          action: 'Block or warn on unsanctioned Copilot Studio surfaces and shadow-AI consumer sites from managed endpoints via custom URL/domain indicators (Settings > Endpoints > Indicators). Microsoft Defender for Endpoint Web content filtering does NOT expose an Artificial Intelligence or Generative AI category; FQDN-level blocking on the endpoint must be done via custom indicators.',
           status: 'GA',
           appliesToWorkloads: ['agents', 'plugins'],
         },
@@ -390,7 +398,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Insider Risk Management - Risky AI usage',
           action: 'Detect risky prompt patterns and unethical-behavior signals from Copilot Studio agents.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'ai-threats', 'plugins'],
+          appliesToWorkloads: ['agents', 'data', 'ai-threats', 'plugins'],
         },
         {
           tool: 'Microsoft Defender for Cloud Apps - real-time agent protection during runtime',
@@ -451,7 +459,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Purview Communication Compliance',
           action: 'Review Copilot Studio agent interactions for policy concerns where supported.',
           status: 'GA',
-          appliesToWorkloads: ['agents', 'govern'],
+          appliesToWorkloads: ['agents', 'data', 'govern'],
         },
       ],
     },
@@ -477,7 +485,7 @@ export const platforms: Platform[] = [
         suggestion: 'Insert a third-party AI runtime gateway in front of Copilot Studio MCP tool calls and custom-connector Actions.',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['plugins', 'agents', 'ai-threats'],
+        appliesToWorkloads: ['plugins', 'agents', 'data', 'ai-threats'],
       },
       {
         gap: 'Agent identity is per-tenant but cross-tenant agent-to-agent calls require the Agent 365 pre-integration list (GA since 1 May 2026).',
@@ -2462,9 +2470,9 @@ export const platforms: Platform[] = [
         },
         {
           tool: 'Microsoft Entra Global Secure Access (GSA) - Internet Access profile with web content filtering',
-          action: 'Force `api.anthropic.com` through GSA Internet Access; apply the "Artificial Intelligence" web content filtering category to allow / warn / block by user group.',
+          action: 'Force `claude.ai` (the standalone GenAI site) through GSA Internet Access; apply the Artificial Intelligence web content filtering category to allow / warn / block by user group. NOTE: the GSA AI category covers standalone GenAI provider sites only (e.g., claude.ai) - it does NOT inspect programmatic `api.anthropic.com` traffic, which must be controlled via GSA private/internal access, Azure Firewall egress rules, APIM in front, or routing via Azure AI Model Inference.',
           status: 'GA',
-          caveat: 'Microsoft Learn does not publish per-FQDN inventory under the AI category; confirm in GSA Traffic Logs and dispute via gsawebcatdispute@service.microsoft.com if blocked.',
+          caveat: 'Microsoft Learn does not publish per-FQDN inventory under the AI category; confirm in GSA Traffic Logs and dispute via gsawebcatdispute@service.microsoft.com if blocked. The AI category does NOT cover api.anthropic.com programmatic traffic.',
           appliesToWorkloads: ['agents', 'apis', 'apps', 'plugins', 'shadow', 'data'],
         },
         {
@@ -2568,7 +2576,7 @@ export const platforms: Platform[] = [
         suggestion: 'Front the model via Azure AI Model Inference where possible; otherwise compensate with a prompt firewall (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI). Treat direct calls as exceptions requiring review.',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['apps', 'apis', 'agents', 'ai-threats'],
+        appliesToWorkloads: ['apps', 'apis', 'agents', 'data', 'ai-threats'],
       },
       {
         gap: 'Custom agent frameworks (LangChain, MCP, etc.) calling Claude directly are governed by the developer process, not by Microsoft tooling.',
@@ -2584,7 +2592,7 @@ export const platforms: Platform[] = [
         suggestion: 'For content-level inspection of Claude API / MCP traffic, deploy a compensating gateway (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI).',
         layer: 'network',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['apis', 'shadow', 'agents', 'plugins'],
+        appliesToWorkloads: ['apis', 'shadow', 'agents', 'data', 'plugins'],
       },
       {
         gap: 'Microsoft Purview Communication Compliance, eDiscovery, and Retention for "Other AI apps" are restricted to ChatGPT, Microsoft Chat (consumer), Gemini, and DeepSeek per Microsoft Learn. Claude is explicitly NOT in scope for these three capabilities (verified 2026-05-19).',
@@ -2681,7 +2689,7 @@ export const platforms: Platform[] = [
           action: 'Centralize and monitor secrets and Customer-managed keys (CMK) for AI workloads.',
           status: 'GA',
           caveat: 'Disable Key Vault public network access, deploy a private endpoint into the runtime VNet, and restrict access to managed identities only (no key-based or shared-access auth from app workloads).',
-          appliesToWorkloads: ['infra', 'apis', 'plugins'],
+          appliesToWorkloads: ['infra', 'apis', 'data', 'plugins'],
         },
         {
           tool: 'Microsoft Defender for Cloud Apps - MCP server allow-list / Entra app catalogue',
@@ -2694,7 +2702,7 @@ export const platforms: Platform[] = [
           tool: 'Azure API Management - AI gateway for Azure OpenAI / Foundry endpoints',
           action: 'Front Azure OpenAI / Foundry inference endpoints behind APIM for per-consumer rate limiting, key rotation, subscription quotas, and Sentinel logging. Apply the AI-specific policies `llm-token-limit`, `llm-semantic-cache-lookup` / `llm-semantic-cache-store`, `llm-content-safety`, and `llm-emit-token-metric` for per-consumer token caps, prompt/response inspection, and cost telemetry. APIM is the only Microsoft-native runtime inspection point on the outbound request path for Foundry-agent \u2192 MCP-server egress from Azure compute; Prompt Shields covers the inbound MCP response.',
           status: 'GA',
-          appliesToWorkloads: ['apis', 'apps', 'plugins', 'infra'],
+          appliesToWorkloads: ['apis', 'apps', 'data', 'plugins', 'infra'],
         },
       ],
       dataProtection: [
@@ -2702,7 +2710,7 @@ export const platforms: Platform[] = [
           tool: 'Azure AI Content Safety \u2192 Prompt Shields',
           action: 'Enable user-prompt and document-attack detection at the user-input and tool-response intervention points. Applies to MCP tool-response indirect-injection at the tool-response intervention point when the calling model is on Foundry / Azure AI Content Safety.',
           status: 'GA',
-          appliesToWorkloads: ['apps', 'agents', 'ai-threats', 'plugins', 'apis'],
+          appliesToWorkloads: ['apps', 'agents', 'ai-threats', 'data', 'plugins', 'apis'],
         },
         {
           tool: 'Defender for Cloud sensitive-data discovery + Purview DSPM for AI',
@@ -2792,7 +2800,7 @@ export const platforms: Platform[] = [
         suggestion: 'Mandate Azure AI Model Inference for any sanctioned third-party model; treat direct provider calls as exceptions. Compensate with a prompt firewall in the call path (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI).',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['apps', 'apis', 'agents', 'plugins', 'infra'],
+        appliesToWorkloads: ['apps', 'apis', 'agents', 'data', 'plugins', 'infra'],
       },
       {
         gap: 'No Microsoft device-posture control over developer workstations / build agents calling Foundry SDK or REST endpoints from outside the tenant network path.',
@@ -4164,13 +4172,13 @@ export const platforms: Platform[] = [
           action: 'Ingest ChatGPT Enterprise prompts and responses into Purview via the OpenAI Compliance API.',
           status: 'GA',
           caveat: 'Supported: DSPM, Audit, Classification, IRM, Communication Compliance, eDiscovery, Lifecycle, Compliance Manager. Not supported: sensitivity labels, encryption, DLP.',
-          appliesToWorkloads: ['plugins', 'govern'],
+          appliesToWorkloads: ['plugins', 'data', 'govern'],
         },
         {
           tool: 'Microsoft Purview "Other AI apps" admin path',
           action: 'General supported-sites + Edge-browser path for ChatGPT Business / consumer / Custom GPTs invoked from supported sites.',
           status: 'GA',
-          appliesToWorkloads: ['plugins', 'govern'],
+          appliesToWorkloads: ['plugins', 'data', 'govern'],
         },
       ],
     },
@@ -4181,7 +4189,7 @@ export const platforms: Platform[] = [
         suggestion: 'For tenants that need runtime prompt/response inspection of ChatGPT Custom GPTs, deploy an AI prompt firewall / governance platform that intercepts on the user endpoint or via the OpenAI Compliance API (Enterprise tier only).',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['plugins', 'ai-threats'],
+        appliesToWorkloads: ['plugins', 'data', 'ai-threats'],
       },
       {
         gap: 'OpenAI Compliance API (the Microsoft Purview ingestion path for ChatGPT Enterprise prompts and responses) is restricted to ChatGPT Enterprise and Edu - not available on ChatGPT Business / Pro / Plus / consumer. Custom GPT Action call logs are not in Compliance API scope (Action telemetry lives in the developer-owned external API, not in OpenAI workspace audit) [Vendor - validate].',
@@ -4196,7 +4204,7 @@ export const platforms: Platform[] = [
         suggestion: 'Treat Custom GPT Actions as third-party API integrations; require developer-side audit logging and ingest into Sentinel. For content-level inspection, deploy a third-party prompt firewall (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI).',
         layer: 'network',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['plugins', 'shadow', 'ai-threats'],
+        appliesToWorkloads: ['plugins', 'shadow', 'data', 'ai-threats'],
       },
       {
         gap: 'Microsoft Purview Communication Compliance, eDiscovery, and Retention for "Other AI apps" are restricted to ChatGPT, Microsoft Chat (consumer), Google Gemini, and DeepSeek and require Microsoft Edge browser sessions on the supported sites. Without Edge enforcement, these three capabilities do not apply to Custom GPTs.',
@@ -4630,9 +4638,9 @@ export const platforms: Platform[] = [
         },
         {
           tool: 'Microsoft Entra Global Secure Access (GSA) - Internet Access profile with web content filtering (Artificial Intelligence category)',
-          action: 'Force api.openai.com, platform.openai.com, chatgpt.com, and OpenAI agent endpoints through GSA Internet Access; allow / warn / block via the Artificial Intelligence category by user group.',
+          action: 'Force chatgpt.com (the standalone GenAI site) through GSA Internet Access; allow / warn / block via the Artificial Intelligence category by user group. NOTE: the GSA AI category covers standalone GenAI provider sites only - it does NOT inspect api.openai.com / platform.openai.com programmatic traffic, which must be controlled via APIM in front, Azure Firewall egress rules, or routing via Azure OpenAI / Azure AI Model Inference.',
           status: 'GA',
-          caveat: 'Microsoft Learn does not publish a per-FQDN inventory of which sites fall under the Artificial Intelligence category. Confirm coverage of api.openai.com by inspecting GSA Traffic Logs (Web Category column) and file a categorization dispute via gsawebcatdispute@service.microsoft.com if needed. Note: GSA Internet Access covers developer workstations only (managed devices forwarded to GSA); it does NOT inspect runtime egress from Azure compute calling api.openai.com - route those through APIM, Azure Firewall, or front via Azure OpenAI.',
+          caveat: 'Microsoft Learn does not publish a per-FQDN inventory of which sites fall under the Artificial Intelligence category and explicitly does NOT cover programmatic API endpoints like api.openai.com. Confirm coverage of chatgpt.com by inspecting GSA Traffic Logs (Web Category column) and file a categorization dispute via gsawebcatdispute@service.microsoft.com if needed. GSA Internet Access covers developer workstations only (managed devices forwarded to GSA); it does NOT inspect runtime egress from Azure compute calling api.openai.com - route those through APIM, Azure Firewall, or front via Azure OpenAI.',
           appliesToWorkloads: ['agents', 'apps', 'apis', 'shadow'],
         },
         {
@@ -4729,7 +4737,7 @@ export const platforms: Platform[] = [
         suggestion: 'Front the model via Azure OpenAI or Azure AI Model Inference where possible; otherwise compensate with a prompt firewall (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI). Treat direct calls as exceptions requiring review.',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'apis'],
+        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'data', 'apis'],
       },
       {
         gap: 'OpenAI is not on the Microsoft Agent 365 ready-to-deploy partner list (verified 2026-05-20; current partners include Achievers, Adobe, Box, Canva, Celonis, Cornerstone, Coursera, Egnyte, Figma, Genspark, Gloat, Kasisto, Kore, Lucid, Manus, Miro, n8n, Nvidia, Rox, Sophos, Zendesk, Zensai, Zoho). No-code auto-registration is currently limited to Google Vertex AI and Amazon Bedrock agents. Internally-built OpenAI Agents SDK agents CAN be onboarded into Agent 365 inventory via the first-party SDK extension packages (see Govern step), but this requires code instrumentation in the agent itself.',
@@ -4786,7 +4794,7 @@ export const platforms: Platform[] = [
         suggestion: 'For content-level inspection of OpenAI API traffic, deploy a compensating gateway in the call path (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI); for Azure-hosted callers, optionally add Azure Firewall Premium with outbound TLS inspection and URL filtering for FQDN-level visibility.',
         layer: 'network',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['agents', 'apps', 'apis', 'shadow'],
+        appliesToWorkloads: ['agents', 'apps', 'apis', 'data', 'shadow'],
       },
     ],
     sourceIds: [
@@ -5734,8 +5742,8 @@ export const platforms: Platform[] = [
           appliesToWorkloads: ['agents', 'apps', 'data'],
         },
         {
-          tool: 'Microsoft Defender for Endpoint - web content filtering (shadow-AI bypass prevention only)',
-          action: 'On developer endpoints, block unsanctioned generative-AI categories to prevent shadow-AI bypass to consumer AI sites. Does not protect the Bedrock runtime itself - only keeps developer endpoints from leaking to unsanctioned AI.',
+          tool: 'Microsoft Defender for Endpoint - custom URL / domain indicators (shadow-AI bypass prevention only)',
+          action: 'On developer endpoints, block unsanctioned shadow-AI consumer GenAI sites via Microsoft Defender for Endpoint custom URL/domain indicators. Microsoft Defender for Endpoint Web content filtering does NOT expose an Artificial Intelligence or Generative AI category - indicators are the FQDN-level enforcement point. Does not protect the Bedrock runtime itself - only keeps developer endpoints from leaking to unsanctioned AI.',
           status: 'GA',
           appliesToWorkloads: ['agents', 'apps'],
         },
@@ -5785,7 +5793,7 @@ export const platforms: Platform[] = [
         suggestion: 'Compensate with AWS Bedrock Guardrails plus a third-party prompt firewall (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI).',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'apis'],
+        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'data', 'apis'],
       },
       {
         gap: 'Defender for AI Services token scanning is Azure-only and does not cover Bedrock.',
@@ -5895,8 +5903,8 @@ export const platforms: Platform[] = [
           appliesToWorkloads: ['agents', 'apps', 'data'],
         },
         {
-          tool: 'Microsoft Defender for Endpoint - web content filtering (shadow-AI bypass prevention only)',
-          action: 'On developer endpoints, block unsanctioned generative-AI categories to prevent shadow-AI bypass to consumer AI sites. Does not protect the Vertex runtime itself - only keeps developer endpoints from leaking to unsanctioned AI.',
+          tool: 'Microsoft Defender for Endpoint - custom URL / domain indicators (shadow-AI bypass prevention only)',
+          action: 'On developer endpoints, block unsanctioned shadow-AI consumer GenAI sites via Microsoft Defender for Endpoint custom URL/domain indicators. Microsoft Defender for Endpoint Web content filtering does NOT expose an Artificial Intelligence or Generative AI category - indicators are the FQDN-level enforcement point. Does not protect the Vertex runtime itself - only keeps developer endpoints from leaking to unsanctioned AI.',
           status: 'GA',
           appliesToWorkloads: ['agents', 'apps'],
         },
@@ -5946,7 +5954,7 @@ export const platforms: Platform[] = [
         suggestion: 'Compensate with GCP Vertex guardrails plus a third-party prompt firewall (alphabetized: CalypsoAI, Cisco AI Defense, Lakera Guard, Protect AI).',
         layer: 'app',
         compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
-        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'apis'],
+        appliesToWorkloads: ['agents', 'apps', 'ai-threats', 'data', 'apis'],
       },
       {
         gap: 'No Purview coverage of Vertex AI prompts / responses or grounding data.',
