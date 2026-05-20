@@ -197,6 +197,13 @@ export const sources: SourceRef[] = [
     note: 'Sensitivity labels honored end-to-end on SharePoint knowledge; Responsible AI validation checks inherited from Microsoft 365 Copilot.',
   },
   {
+    id: 'foundry-mcp-auth',
+    title: 'Authenticate Foundry agents to MCP servers',
+    url: 'https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication',
+    status: 'Needs validation',
+    note: 'Documents the Foundry-agent \u2192 MCP-server auth path; managed identity is the recommended pattern. Validate URL on next sync.',
+  },
+  {
     id: 'foundry-agent-service-overview',
     title: 'Microsoft Foundry Agent Service overview',
     url: 'https://learn.microsoft.com/en-us/azure/ai-foundry/agents/overview',
@@ -527,7 +534,7 @@ export const sources: SourceRef[] = [
     title: 'OpenAI Compliance API for enterprise customers',
     url: 'https://help.openai.com/en/articles/9261474-compliance-apis-for-enterprise-customers',
     status: 'Needs validation',
-    note: 'Compliance API is Enterprise-only (not Edu, not Business). Mechanism Microsoft Purview uses to ingest ChatGPT Enterprise prompts/responses. Newer Compliance Logs Platform offers centralized streaming pipeline. IP allowlisting enforced on Compliance API traffic. Vendor doc.',
+    note: 'Compliance API is available for ChatGPT Enterprise and Edu (not Business, not Pro / Plus / consumer). Mechanism Microsoft Purview uses to ingest ChatGPT Enterprise/Edu prompts/responses. Newer Compliance Logs Platform offers centralized streaming pipeline. IP allowlisting enforced on Compliance API traffic. Vendor doc.',
   },
   {
     id: 'openai-business-data',
@@ -904,5 +911,33 @@ export const sources: SourceRef[] = [
     url: 'https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-endpoint',
     status: 'Official docs',
     note: 'Device compliance and risk signals that feed Conditional Access decisions for SaaS AI surfaces.',
+  },
+  {
+    id: 'copilot-studio-mcp-overview',
+    title: 'Extend a Copilot Studio agent with Model Context Protocol (MCP) actions',
+    url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp',
+    status: 'Official docs',
+    note: 'Confirms MCP integration in Copilot Studio. MCP tools and resources auto-publish to the agent dynamically from the server. Streamable HTTP transport (SSE deprecated after Aug 2025).',
+  },
+  {
+    id: 'copilot-studio-mcp-add-existing',
+    title: 'Add an existing MCP server to a Copilot Studio agent',
+    url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent',
+    status: 'Official docs',
+    note: 'Documents the MCP wizard auth options: None / API key (header or query) / OAuth 2.0. OAuth 2.0 is the documented MCP auth path requiring admin consent.',
+  },
+  {
+    id: 'copilot-studio-mcp-create-new',
+    title: 'Create a new MCP server for Copilot Studio',
+    url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-create-new-server',
+    status: 'Official docs',
+    note: 'Auth options for new MCP servers; recommends Key Vault for API-key storage. Validates Streamable HTTP transport requirement.',
+  },
+  {
+    id: 'power-platform-dlp-classification',
+    title: 'Power Platform connector classification (Business / Non-Business / Blocked)',
+    url: 'https://learn.microsoft.com/en-us/power-platform/admin/dlp-connector-classification',
+    status: 'Official docs',
+    note: 'Power Platform DLP classification for connectors used by Copilot Studio agents and MCP-backing custom connectors.',
   },
 ]

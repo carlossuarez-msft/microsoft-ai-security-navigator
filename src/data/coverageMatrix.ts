@@ -57,6 +57,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
 
   // Tool-name anchored governance rules - run first so an "audit"-named tool wins over
   // downstream matches on IRM/DSPM/labels that appear in its action text.
+  if (/purview for agent 365/i.test(t)) return 'govern'
   if (/purview audit|unified audit log|\bediscovery\b|e-discovery/.test(t)) return 'govern'
   if (/compliance manager|data lifecycle management|lifecycle management|retention policy|\bretention\b|service trust portal|privacy management/.test(t))
     return 'govern'
@@ -128,6 +129,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
 
   // 4) Data security - Purview sensitivity labels / DLP / DSPM / Information Protection / classification /
   //    SharePoint Advanced Management, grounding/RAG data discovery
+  if (/power platform dlp/i.test(t)) return 'data'
   if (
     /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security|file polic|session polic/.test(
       ctx,
