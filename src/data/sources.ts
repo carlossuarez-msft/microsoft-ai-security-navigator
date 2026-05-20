@@ -1199,4 +1199,25 @@ export const sources: SourceRef[] = [
     status: 'Official docs',
     note: 'Inventory and govern model / agent APIs fronted by the APIM AI gateway.',
   },
+  {
+    id: 'entra-workload-id-federation',
+    title: 'Workload identity federation in Microsoft Entra',
+    url: 'https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation',
+    status: 'Official docs',
+    note: 'Federate workload identities from GitHub, AKS, Kubernetes, GCP, AWS, and other external IdPs into Entra without long-lived secrets - used for SDK / service-account callers of external AI APIs (Anthropic, OpenAI, Google Gemini / Vertex AI).',
+  },
+  {
+    id: 'entra-agent-id',
+    title: 'Microsoft Entra Agent ID - identities for AI agents',
+    url: 'https://learn.microsoft.com/en-us/entra/agent-id/what-is-microsoft-entra-agent-id',
+    status: 'Official docs',
+    note: 'Entra Agent ID gives Microsoft-platform agents (Foundry, Copilot Studio, Agent-365-registered third-party agents) their own first-class identity.',
+  },
+  {
+    id: 'gcp-vertex-ai-control-plane',
+    title: 'Microsoft Defender for Cloud - AI security posture (Vertex AI + Bedrock coverage)',
+    url: 'https://learn.microsoft.com/en-us/azure/defender-for-cloud/ai-security-posture',
+    status: 'Official docs',
+    note: 'Defender for Cloud AI Security Posture page enumerates multi-cloud coverage for GCP Vertex AI and AWS Bedrock control planes (account discovery, AI BOM, attack paths) when the corresponding multi-cloud connector is configured. Runtime payload content is out of scope.',
+  },
 ]
