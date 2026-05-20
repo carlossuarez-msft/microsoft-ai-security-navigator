@@ -141,6 +141,14 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   // App-first: GitHub Advanced Security / secret scanning protects application source code.
   if (/github advanced security|secret scanning|\bghas\b/.test(ctx)) return 'app'
 
+  // Defender for Cloud sub-products with author-intent overrides — must run BEFORE the
+  // residual `defender for cloud(?! apps)` → app rule below.
+  // - DfC regulatory compliance dashboard / standards / compliance manager → govern
+  // - DfC DevOps security → detect (code-scanning / secret-scanning findings)
+  if (/defender for cloud.*(regulatory|compliance dashboard|compliance manager|security standards)/.test(ctx))
+    return 'govern'
+  if (/defender for cloud (devops|for devops)/.test(ctx)) return 'detect'
+
   // 5) App & workload - Content Safety, Prompt Shields, Azure OpenAI / Foundry,
   //    Key Vault for app secrets, APIM / model gateway. (Defender for AI Services moved to detect.)
   if (
