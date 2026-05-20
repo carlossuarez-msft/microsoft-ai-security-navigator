@@ -15,6 +15,9 @@ export const platforms: Platform[] = [
     name: 'Microsoft 365 Copilot',
     kind: 'microsoft',
     applicableWorkloads: ['chat', 'data', 'ai-threats', 'govern'],
+    layerContext: {
+      app: 'Microsoft Responsible AI mitigations, Prompt Shields, and the Protected Material classifier ARE in the M365 Copilot service path - but they are server-side and not tenant-configurable. Defender for AI Services covers Azure OpenAI + Azure AI Model Inference + Foundry only, NOT M365 Copilot. There is no Microsoft tenant control plane for prompt-firewall tuning, custom safety policies, or AI runtime hardening on M365 Copilot itself.',
+    },
     summary:
       'Microsoft\u2019s first-party productivity copilot family (Microsoft 365 Copilot, Microsoft 365 Copilot Chat, Microsoft 365 Copilot Search, Copilot Pages, Copilot Notebooks, Researcher, Analyst). Microsoft Purview, Microsoft Entra, Defender, and Intune controls apply natively across most lanes; oversharing remediation, inline prompt-injection defense, and tenant-side network inspection of Copilot LLM traffic remain documented gaps (see Gaps below).',
     microsoftCoverage: 'High',
@@ -627,6 +630,9 @@ export const platforms: Platform[] = [
     name: 'ChatGPT Enterprise / Edu / Business (OpenAI)',
     kind: 'openai',
     applicableWorkloads: ['chat', 'shadow', 'ai-threats', 'govern'],
+    layerContext: {
+      app: 'Microsoft\u2019s tenant-configurable AI runtime safety (Azure AI Content Safety / Prompt Shields, Defender for AI Services, Defender for Cloud AI-SPM) covers Azure OpenAI + Azure AI Foundry + Azure AI Model Inference only. OpenAI\u2019s own moderation and safety classifiers run inside ChatGPT and are vendor-internal - they are not exposed to tenant admins for tuning, logging, or policy authoring.',
+    },
     summary:
       'OpenAI\u2019s admin-managed workspaces: ChatGPT Enterprise, ChatGPT Edu, and ChatGPT Business (formerly ChatGPT Team, renamed 2025-08-29). Among non-Microsoft AI apps, has the broadest Purview integration today: prompts and responses flow into Purview audit, DSPM for AI, classification, Insider Risk Management, eDiscovery, and Communication Compliance via the OpenAI Compliance API. The hard limit is enforcement: no enforced sensitivity labels, no encryption-on-labels, and no in-line DLP via Microsoft.',
     microsoftCoverage: 'Medium',
@@ -831,6 +837,9 @@ export const platforms: Platform[] = [
     name: 'ChatGPT (consumer - Free / Plus)',
     kind: 'openai',
     applicableWorkloads: ['chat', 'shadow', 'govern'],
+    layerContext: {
+      app: 'Microsoft\u2019s tenant-configurable AI runtime safety (Azure AI Content Safety / Prompt Shields, Defender for AI Services, Defender for Cloud AI-SPM) covers Azure OpenAI + Azure AI Foundry + Azure AI Model Inference only. OpenAI\u2019s safety stack inside ChatGPT is vendor-internal, and Free / Plus tiers have no admin plane on the OpenAI side either - there is nothing for a tenant admin to configure at this layer.',
+    },
     summary:
       'Non-enterprise OpenAI tiers reached via chatgpt.com (Free and Plus only - Business has its own admin plane and is covered by the ChatGPT Enterprise / Edu / Business tile). There is no Purview-side enterprise integration; everything Microsoft does is at the browser, endpoint, and network layer. Treat as shadow AI by default.',
     microsoftCoverage: 'Medium',
@@ -986,6 +995,9 @@ export const platforms: Platform[] = [
     name: 'Claude.ai (Anthropic web)',
     kind: 'anthropic',
     applicableWorkloads: ['chat', 'shadow', 'govern'],
+    layerContext: {
+      app: 'Microsoft\u2019s tenant-configurable AI runtime safety (Azure AI Content Safety / Prompt Shields, Defender for AI Services, Defender for Cloud AI-SPM) covers Azure OpenAI + Azure AI Foundry + Azure AI Model Inference only. Anthropic\u2019s Constitutional AI classifiers and jailbreak defenses live inside Claude.ai and are vendor-internal - tenant admins cannot tune, log, or override them.',
+    },
     summary:
       'Anthropic\u2019s browser-based product (Free, Pro, Max, Team, Enterprise) - the "Claude for Work" umbrella covers Team and Enterprise. Microsoft treats it as an "Other AI app": discoverable through GSA Shadow AI Discovery and Defender for Cloud Apps; protectable via Purview DLP, Endpoint DLP, and the Purview browser extension. Important honesty note: Microsoft Purview Communication Compliance, eDiscovery, and prompt retention for "Other AI apps" are restricted to ChatGPT, Microsoft Chat (consumer), Google Gemini, and DeepSeek - Claude is excluded from all three.',
     microsoftCoverage: 'Medium',
@@ -1140,6 +1152,9 @@ export const platforms: Platform[] = [
     name: 'Claude Desktop (Anthropic native app)',
     kind: 'anthropic',
     applicableWorkloads: ['chat', 'shadow', 'govern'],
+    layerContext: {
+      app: 'Microsoft\u2019s tenant-configurable AI runtime safety (Azure AI Content Safety / Prompt Shields, Defender for AI Services, Defender for Cloud AI-SPM) covers Azure OpenAI + Azure AI Foundry + Azure AI Model Inference only. Anthropic\u2019s Constitutional AI classifiers run inside the Claude service and are vendor-internal. The native desktop client also bypasses any browser-extension-based prompt inspection, so even Purview\u2019s "Other AI apps" surface (which excludes Claude anyway) would not see it.',
+    },
     summary:
       'Anthropic\u2019s native Windows / macOS app. It does not run inside a browser, so the Purview browser extension and Edge DLP do not see prompt content - but Anthropic now ships a real enterprise admin plane (MSIX/PKG packaging for Intune/Jamf/GPO, plus tenant policy keys including MCP kill-switch, Cowork kill-switch, auto-update enforcement, and local-developer-MCP block). Microsoft coverage layers on top: network egress (GSA + Defender for Endpoint network protection), Endpoint DLP, Intune app control, and the new Microsoft Agent 365 Shadow AI page (GA 2026-05-01) which enumerates the Claude Code CLI surface. The Claude Code "Code" tab inside Claude Desktop is the same binary as Anthropic\u2019s standalone Claude Code CLI.',
     microsoftCoverage: 'Medium',

@@ -625,7 +625,13 @@ export function getLayeredCoverage(useCase: UseCase, platform: Platform): Layere
     byLayer.get(l)!.gaps.push(g)
   }
 
-  return { layers: layerOrder.map((l) => byLayer.get(l)!) }
+  return {
+    layers: layerOrder.map((l) => {
+      const sec = byLayer.get(l)!
+      const ctx = platform.layerContext?.[l]
+      return ctx ? { ...sec, context: ctx } : sec
+    }),
+  }
 }
 
 // Map a use-case's primary lanes to the layers we should *emphasize* in Step 3.
@@ -695,7 +701,13 @@ export function getLayeredCoverageForWorkload(workload: Workload, platform: Plat
     const l = g.layer ?? guessGapLayer(g.gap)
     byLayer.get(l)!.gaps.push(g)
   }
-  return { layers: layerOrder.map((l) => byLayer.get(l)!) }
+  return {
+    layers: layerOrder.map((l) => {
+      const sec = byLayer.get(l)!
+      const ctx = platform.layerContext?.[l]
+      return ctx ? { ...sec, context: ctx } : sec
+    }),
+  }
 }
 
 // Union of primary-layer emphasis across all child use cases of a workload.

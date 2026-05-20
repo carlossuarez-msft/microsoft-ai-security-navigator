@@ -498,6 +498,7 @@ function Step3({ workload, platform, onBack, onStartOver, onEditWorkload, onEdit
             layer={sec.layer}
             tools={sec.tools}
             gaps={sec.gaps}
+            context={sec.context}
             platform={platform}
             isPrimary={primaryLayers.has(sec.layer)}
           />
@@ -584,11 +585,12 @@ interface LayerCardProps {
   layer: Layer
   tools: import('../types/content').LayerSection['tools']
   gaps: import('../types/content').LayerSection['gaps']
+  context?: string
   platform: Platform
   isPrimary: boolean
 }
 
-function LayerCard({ index, layer, tools, gaps, platform, isPrimary }: LayerCardProps) {
+function LayerCard({ index, layer, tools, gaps, context, platform, isPrimary }: LayerCardProps) {
   const noMs = tools.length === 0
   const toolCount = tools.length
   const gapCount = gaps.length
@@ -634,7 +636,14 @@ function LayerCard({ index, layer, tools, gaps, platform, isPrimary }: LayerCard
             <div className="layer-col__body layer-col__body--ms">
               {tools.length === 0 ? (
                 <div className="layer-col__empty-box" role="note">
-                  No Microsoft tool covers this layer for {platform.name}. See compensating controls &rarr;
+                  {context ? (
+                    <>
+                      <p className="layer-col__empty-context">{context}</p>
+                      <p className="layer-col__empty-pointer">No tenant-configurable Microsoft control plane applies here. See compensating controls &rarr;</p>
+                    </>
+                  ) : (
+                    <>No Microsoft tool covers this layer for {platform.name}. See compensating controls &rarr;</>
+                  )}
                 </div>
               ) : (
                 <ul className="tool-list">

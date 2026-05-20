@@ -47,6 +47,13 @@ export interface Platform {
    * used by Step 2 to filter the platform picker and by Step 3 to scope the plan.
    */
   applicableWorkloads: WorkloadCategory[]
+  /**
+   * Optional per-layer contextual note. Rendered in the LayerCard's "Microsoft tools"
+   * column when a layer has 0 tracked Microsoft tools. Use it to explain WHY there is
+   * no tenant-configurable Microsoft control plane at this layer for this platform
+   * (e.g., "OpenAI safety classifiers are vendor-internal").
+   */
+  layerContext?: Partial<Record<Layer, string>>
 }
 
 export interface SourceRef {
@@ -201,6 +208,11 @@ export interface LayerSection {
   layer: Layer
   tools: ToolCoverage[]
   gaps: Gap[]
+  /**
+   * Optional contextual note for this layer on this platform. Rendered when the
+   * Microsoft tools column is empty to explain why (e.g., vendor-internal safety stack).
+   */
+  context?: string
 }
 
 export interface LayeredCoverage {
