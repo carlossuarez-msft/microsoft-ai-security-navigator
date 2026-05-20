@@ -1346,10 +1346,10 @@ export const platforms: Platform[] = [
     kind: 'anthropic',
     applicableWorkloads: ['agents', 'apps', 'plugins', 'apis', 'data', 'shadow', 'ai-threats', 'govern'],
     layerContext: {
-      app: 'No Microsoft App-layer runtime control applies to direct api.anthropic.com calls - Defender for AI Services scope is Azure OpenAI + Azure AI Model Inference + Foundry only. The Microsoft-native option is to front Claude via Azure AI Model Inference (Foundry MaaS) so Prompt Shields / Defender for AI Services / Content Safety apply; otherwise the compensating vendor list below is how teams close this layer.',
+      app: 'No Microsoft App-layer runtime control applies to direct api.anthropic.com calls - Defender for AI Services is documented for Azure OpenAI + Azure AI Model Inference (text tokens). Microsoft Learn does not explicitly document Anthropic-specific coverage on Model Inference, so fronting Claude through Foundry MaaS may bring Prompt Shields / Content Safety into the call path but Defender for AI Services applicability for Anthropic models is not affirmed - validate with Microsoft. Otherwise the compensating vendor list below is how teams close this layer.',
     },
     summary:
-      'Anthropic Claude as an agent enabler - used from custom agent frameworks (LangChain, Agno), MCP servers, CI pipelines, and partner products. Server-to-server API calls and MCP tool invocations are largely invisible to user-centric Microsoft controls. Best Microsoft option: front the model via Azure AI Model Inference so Defender for AI Services and Prompt Shields apply; otherwise rely on GSA / Defender for Endpoint network egress controls, Defender for Cloud Apps MCP app catalogue, Entra app consent governance, and DevSecOps.',
+      'Anthropic Claude as an agent enabler - used from custom agent frameworks (LangChain, Agno), MCP servers, CI pipelines, and partner products. Server-to-server API calls and MCP tool invocations are largely invisible to user-centric Microsoft controls. Best Microsoft option: front the model via Azure AI Model Inference so identity, network, Prompt Shields, and Content Safety controls apply (Microsoft Learn does not explicitly document Defender for AI Services coverage of Anthropic models on Model Inference - validate with Microsoft); otherwise rely on GSA / Defender for Endpoint network egress controls, Defender for Cloud Apps MCP app catalogue, Entra app consent governance, and DevSecOps.',
     microsoftCoverage: 'Low',
     nativeControls: [
       'Anthropic API keys, workspace scoping, rate limits, and usage logs (vendor-side) [Vendor - validate]',
@@ -1377,8 +1377,8 @@ export const platforms: Platform[] = [
         {
           tool: 'Azure AI Model Inference (consume Anthropic models via Foundry catalog)',
           action:
-            'Where possible, consume Claude through Azure AI Model Inference so identity, network, and Defender for AI Services controls apply.',
-          status: 'GA',
+            'Where possible, consume Claude through Azure AI Model Inference so Microsoft identity and network controls apply on the Azure ingress. Defender for AI Services applicability to Anthropic models on Model Inference is not explicitly documented on Microsoft Learn - validate with Microsoft before relying on it.',
+          status: 'Validate',
           appliesToWorkloads: ['apis', 'apps', 'agents'],
         },
         {
