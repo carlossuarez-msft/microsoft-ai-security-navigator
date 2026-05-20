@@ -722,7 +722,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender for Endpoint web content filtering',
           action: 'Block or audit api.anthropic.com / claude.ai egress on devices where Claude Code is not sanctioned. MDE has no Generative AI parent category, so use custom URL/IP indicators for FQDN scope.',
           status: 'GA',
-          appliesToWorkloads: ['coding', 'govern'],
+          appliesToWorkloads: ['coding', 'shadow', 'govern'],
         },
         {
           tool: 'Microsoft Purview Endpoint DLP (browser / upload scope)',
@@ -750,13 +750,13 @@ export const platforms: Platform[] = [
           action: 'No first-party Sentinel connector for Anthropic exists. Ingest Anthropic Console audit logs via Logic App / Azure Function into a custom Sentinel table; correlate with Entra sign-ins.',
           status: 'GA',
           caveat: 'Custom connector required; no first-party Anthropic integration.',
-          appliesToWorkloads: ['coding', 'ai-threats', 'govern'],
+          appliesToWorkloads: ['coding', 'shadow', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Defender XDR',
           action: 'Stitch Entra sign-in to Anthropic SSO, MDE endpoint signals, and GSA Shadow AI traffic into one developer-centric incident view.',
           status: 'GA',
-          appliesToWorkloads: ['coding', 'ai-threats'],
+          appliesToWorkloads: ['coding', 'shadow', 'ai-threats'],
         },
         {
           tool: 'Microsoft Defender for Cloud DevOps security',
@@ -1136,7 +1136,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender for Endpoint web content filtering',
           action: 'Block or allow-list chatgpt.com / api.openai.com per device group using custom URL/IP indicators (MDE has no Generative AI parent category).',
           status: 'GA',
-          appliesToWorkloads: ['coding', 'govern'],
+          appliesToWorkloads: ['coding', 'shadow', 'govern'],
         },
         {
           tool: 'Microsoft Purview Endpoint DLP (browser scope)',
@@ -1171,13 +1171,13 @@ export const platforms: Platform[] = [
           action: 'No first-party Sentinel - OpenAI connector exists. Pull ChatGPT Enterprise Compliance API events into a custom Sentinel table via Logic App / Function.',
           status: 'Validate',
           caveat: 'Custom integration; verify Compliance API availability on your OpenAI plan.',
-          appliesToWorkloads: ['coding', 'ai-threats', 'govern'],
+          appliesToWorkloads: ['coding', 'shadow', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Defender XDR',
           action: 'Correlate Entra sign-in to the OpenAI SSO app + endpoint + GSA Codex traffic into one incident graph.',
           status: 'GA',
-          appliesToWorkloads: ['coding', 'ai-threats'],
+          appliesToWorkloads: ['coding', 'shadow', 'ai-threats'],
         },
         {
           tool: 'GitHub Advanced Security - secret scanning + push protection',
@@ -3935,13 +3935,13 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender XDR - AI agent inventory',
           action: 'Cross-cloud agent inventory (Copilot Studio + Microsoft Foundry + AWS Bedrock + GCP Vertex AI). MCP-as-tool is not separately enumerated; coverage is inferred via the agent.',
           status: 'GA',
-          appliesToWorkloads: ['plugins', 'agents', 'ai-threats'],
+          appliesToWorkloads: ['plugins', 'agents', 'shadow', 'ai-threats'],
         },
         {
           tool: 'Microsoft Sentinel - Logs Ingestion API for third-party MCP / prompt-firewall logs',
           action: 'Custom-table pattern for ingesting MCP-server audit and third-party prompt-firewall events into Sentinel.',
           status: 'GA',
-          appliesToWorkloads: ['plugins', 'ai-threats', 'govern'],
+          appliesToWorkloads: ['plugins', 'shadow', 'ai-threats', 'govern'],
         },
       ],
       govern: [
@@ -4144,14 +4144,14 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender XDR + Sentinel',
           action: 'Correlate identity, endpoint, and Purview Audit signals around ChatGPT users into one incident.',
           status: 'GA',
-          appliesToWorkloads: ['plugins', 'ai-threats'],
+          appliesToWorkloads: ['plugins', 'shadow', 'ai-threats'],
         },
         {
           tool: 'Microsoft Sentinel - Logs Ingestion API for OpenAI Admin / Audit Logs API',
           action: 'Ingest OpenAI organization-level audit logs (Admin keys, project events) into a custom Sentinel table via Logic App / Function.',
           status: 'GA',
           caveat: 'OpenAI Compliance API (the prompt / response stream) is ChatGPT Enterprise and Edu only; not Business / Pro / Plus / consumer.',
-          appliesToWorkloads: ['plugins', 'ai-threats', 'govern'],
+          appliesToWorkloads: ['plugins', 'shadow', 'ai-threats', 'govern'],
         },
         {
           tool: 'Microsoft Purview Audit',
@@ -5105,7 +5105,7 @@ export const platforms: Platform[] = [
           action: 'Restrict sensitive paste and file upload from managed endpoints to platform.openai.com via the Endpoint DLP sensitive-service-domain group.',
           status: 'GA',
           caveat: 'api.openai.com is an SDK endpoint and is not browser-traversed - Endpoint DLP cannot intercept server-side SDK or Agents SDK traffic; route those through APIM or GSA instead.',
-          appliesToWorkloads: ['apis', 'apps'],
+          appliesToWorkloads: ['apis', 'apps', 'shadow'],
         },
         {
           tool: 'Microsoft Defender for Cloud sensitive-data discovery',
@@ -5138,7 +5138,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender XDR + Microsoft Sentinel correlation',
           action: 'Stitch GSA / APIM / Defender for Cloud Apps signals with Entra sign-in events on the OpenAI custom SAML enterprise application; correlate as one incident.',
           status: 'GA',
-          appliesToWorkloads: ['apis', 'ai-threats'],
+          appliesToWorkloads: ['apis', 'shadow', 'ai-threats'],
         },
       ],
       govern: [
@@ -5262,6 +5262,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Entra Global Secure Access (GSA) - Shadow AI discovery',
           action: 'Detect generativelanguage.googleapis.com and aistudio.google.com traffic from managed devices; Microsoft Purview "Other AI apps" supported list explicitly names Google Gemini (validate GSA Shadow AI enumeration of *.googleapis.com AI endpoints).',
           status: 'Validate',
+          caveat: 'Gemini / Vertex AI are NOT in the GSA Shadow AI Discovery named feed (named: ChatGPT, Anthropic Claude API, DeepSeek, SaaS MCP servers, AI Model Provider frameworks). Use custom URL category / FQDN coverage instead.',
           appliesToWorkloads: ['apis', 'shadow'],
         },
         {
@@ -5336,13 +5337,13 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender XDR - AI agent inventory',
           action: 'Inventory Vertex AI agents alongside Microsoft Copilot Studio, Microsoft Foundry, and AWS Bedrock agents with posture recommendations and owners.',
           status: 'Preview',
-          appliesToWorkloads: ['apis'],
+          appliesToWorkloads: ['apis', 'shadow'],
         },
         {
           tool: 'Microsoft Sentinel - GCP Pub/Sub Audit Logs connector',
           action: 'Ingest GCP Cloud Audit Logs (Admin Activity, Data Access) including Vertex AI invocation events via the Pub/Sub data connector; build custom analytics for anomalous Vertex / Gemini usage.',
           status: 'GA',
-          appliesToWorkloads: ['apis', 'apps'],
+          appliesToWorkloads: ['apis', 'apps', 'shadow'],
         },
         {
           tool: 'Microsoft Defender for Cloud Apps anomaly detection',
@@ -7375,7 +7376,8 @@ export const platforms: Platform[] = [
         {
           tool: 'Microsoft Entra Global Secure Access - Shadow AI Discovery',
           action: 'See which users hit the SaaS app and its AI features from managed devices; review risk score and usage volume.',
-          status: 'GA',
+          status: 'Validate',
+          caveat: 'The GSA Shadow AI Discovery named feed only enumerates ChatGPT, Anthropic Claude API, DeepSeek, SaaS MCP servers, and AI Model Provider frameworks. Parent SaaS surfaces with embedded AI (Salesforce Einstein, ServiceNow Now Assist, Glean, Notion AI, Slack AI, Atlassian Intelligence, Zoom AI Companion) are NOT in the named feed. Add the SaaS vendor FQDN as a custom URL category and confirm coverage in GSA Traffic Logs.',
           appliesToWorkloads: ['shadow', 'govern'],
         },
         {
@@ -7459,6 +7461,21 @@ export const platforms: Platform[] = [
       ],
     },
     gaps: [
+      {
+        gap: 'No Microsoft tenant-side runtime prompt / response inspection for vendor-embedded AI features inside Notion, Slack, Salesforce, ServiceNow, Atlassian, Zoom, Glean, etc. Defender for AI Services scope is Azure OpenAI + Azure AI Model Inference + Foundry only; Purview "Other AI apps" coverage is limited to supported-sites + Edge browser sessions and excludes most SaaS AI parent surfaces.',
+        compensatingControl: 'third-party',
+        suggestion: 'Front the sanctioned SaaS AI surfaces with a CASB or AI gateway that supports content-level inspection (alphabetized: CalypsoAI, Cisco AI Defense (formerly Robust Intelligence), Lakera Guard, Protect AI); ingest gateway logs into Sentinel for SOC visibility.',
+        layer: 'app',
+        compensatingVendors: ['CalypsoAI', 'Cisco AI Defense (formerly Robust Intelligence)', 'Lakera Guard', 'Protect AI'],
+        appliesToWorkloads: ['saas-embedded', 'shadow', 'ai-threats'],
+      },
+      {
+        gap: 'GSA "Artificial Intelligence" web content filtering category covers standalone GenAI sites (claude.ai, chatgpt.com, deepseek.com, gemini.google.com, copilot.microsoft.com consumer) only. It does NOT cover SaaS parent surfaces (*.salesforce.com, *.service-now.com, *.atlassian.net, *.slack.com, *.notion.so, *.zoom.us, glean.com) - blocks at those FQDNs require custom URL categories or Conditional Access on the SaaS app\u2019s Entra Enterprise Application.',
+        compensatingControl: 'process',
+        suggestion: 'Maintain a tenant-side custom URL category list for every sanctioned SaaS AI surface; pair with Conditional Access scoping on the Entra Enterprise Application object.',
+        layer: 'network',
+        appliesToWorkloads: ['saas-embedded', 'shadow'],
+      },
       {
         gap: 'No Microsoft Purview sensitivity-label enforcement or encryption-on-labels for these SaaS AI surfaces.',
         compensatingControl: 'process',
