@@ -61,6 +61,17 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   if (/compliance manager|data lifecycle management|lifecycle management|retention policy|\bretention\b|service trust portal|privacy management/.test(t))
     return 'govern'
 
+  // Early govern rule: multi-cloud connector / AI security posture / cloud security explorer
+  // route to govern (cross-cloud posture is a governance surface, not application).
+  if (/multi-cloud connector|multi[- ]cloud|ai security posture|defender csp.*aws|defender csp.*gcp|cloud security explorer/.test(ctx))
+    return 'govern'
+
+  // Early govern rule: Agent 365 / Entra Agent ID tools whose action is about
+  // inventory / admin center / registration / catalog → govern (not identity).
+  if (/agent 365|agent id|agent registry/.test(t) &&
+      /inventory|admin center|registration|registry|catalog|govern|third[- ]party|publish|publication target/.test(`${t} ${a}`))
+    return 'govern'
+
   // 1) Endpoint & device — Intune, Defender for Endpoint, Endpoint DLP, AppLocker/WDAC, Edge browser mgmt
   if (
     /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
@@ -69,10 +80,14 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'endpoint'
 
-  // 2) Detect — Defender XDR, Sentinel, IRM, Security Copilot, Communication Compliance.
-  // Pulled early so XDR/Sentinel/IRM beat broader matches downstream (DSPM, GSA, etc.)
+  // 2) Detect — Defender XDR, Sentinel, IRM, Communication Compliance, Defender for AI Services.
+  // Pulled early so XDR/Sentinel/IRM/DfAIS beat broader matches downstream (DSPM, GSA, etc.)
+  // Note: "security copilot" deliberately excluded so steps that protect the
+  // Security Copilot platform itself can land in identity/network/endpoint/govern.
+  // Existing uses of Security Copilot as a SOC tool (e.g. "Defender XDR + Sentinel + Security Copilot")
+  // still classify as detect via the "defender xdr"/"sentinel" matches.
   if (
-    /defender xdr|microsoft sentinel|\bsentinel\b|insider risk|\birm\b|security copilot|communication compliance|defender for office/.test(
+    /defender xdr|microsoft sentinel|\bsentinel\b|insider risk|\birm\b|communication compliance|defender for office|defender for ai services|defender security for ai/.test(
       ctx,
     )
   )
@@ -81,12 +96,12 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   // 2) Network & edge — GSA web/internet filtering, Shadow-AI discovery, web content, DfCA web/cloud discovery,
   //    network protection, SSE/SASE, network DLP, firewall, egress
   if (
-    /web content filtering|internet access|network protection|shadow ai discovery|\bsse\b|\bsase\b|network data security|cloud app catalog|generative ai category|cloud security explorer|attack path|network egress|firewall|private endpoint|\begress\b/.test(
+    /web content filtering|internet access|network protection|shadow ai discovery|\bsse\b|\bsase\b|network data security|cloud app catalog|generative ai category|network egress|firewall|private endpoint|\begress\b/.test(
       ctx,
     )
   )
     return 'network'
-  if (/global secure access|\bgsa\b/.test(t) && /web|shadow|internet|filter|discover|egress|network|category|claude|chat\.openai/.test(a))
+  if (/global secure access|\bgsa\b/.test(t) && /web|shadow|internet|filter|discover|egress|network|category|claude|chat\.openai|traffic|forwarding|exchange|sharepoint|teams|microsoft.*profile/.test(a))
     return 'network'
   if (/defender for cloud apps/.test(t) && /discover|catalog|category|sanction|unsanction|shadow|web/.test(a))
     return 'network'
@@ -100,22 +115,26 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
     return 'identity'
   if (/global secure access|\bgsa\b/.test(t)) return 'identity' // identity-scoped GSA fallback
 
+  // DfCA file/session policies and reverse-proxy → data (must come before residual DfCA→detect).
+  if (/defender for cloud apps/.test(t) && /file polic|session polic|reverse[- ]proxy|conditional access app control|app control/.test(a))
+    return 'data'
+
   // 6) Detect was hoisted above; only residual DfCA falls through here.
   if (/defender for cloud apps/.test(t)) return 'detect'
 
   // 4) Data security — Purview sensitivity labels / DLP / DSPM / Information Protection / classification /
   //    SharePoint Advanced Management, grounding/RAG data discovery
   if (
-    /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security/.test(
+    /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security|file polic|session polic/.test(
       ctx,
     )
   )
     return 'data'
 
-  // 5) App & workload — Content Safety, Prompt Shields, Azure OpenAI / Foundry, Defender for AI Services
-  //    (workload runtime), Key Vault for app secrets, APIM / model gateway
+  // 5) App & workload — Content Safety, Prompt Shields, Azure OpenAI / Foundry,
+  //    Key Vault for app secrets, APIM / model gateway. (Defender for AI Services moved to detect.)
   if (
-    /content safety|prompt shield|azure openai|azure ai foundry|\bfoundry\b|defender for ai services|defender for key vault|defender for storage|\bkey vault\b|azure api management|\bapim\b|model gateway|model inference|defender csp|defender for cloud(?! apps)/.test(
+    /content safety|prompt shield|azure openai|azure ai foundry|\bfoundry\b|defender for key vault|defender for storage|\bkey vault\b|azure api management|\bapim\b|model gateway|model inference|defender csp|defender for cloud(?! apps)/.test(
       ctx,
     )
   )
@@ -249,7 +268,7 @@ const explicitGaps: Record<string, Gap[]> = {
       layer: 'endpoint',
     },
   ],
-  'chat-prevent-data-leak:claude-api': [
+  'chat-prevent-data-leak:claude-agents': [
     {
       gap: 'No prompt-content DLP via Microsoft for direct Anthropic API traffic from custom apps, CI jobs, or MCP servers.',
       compensatingControl: 'third-party',
@@ -278,7 +297,7 @@ const explicitGaps: Record<string, Gap[]> = {
       layer: 'govern',
     },
   ],
-  'chat-audit-ediscovery:claude-api': [
+  'chat-audit-ediscovery:claude-agents': [
     {
       gap: 'No Microsoft-side prompt retention for direct Anthropic API calls.',
       compensatingControl: 'third-party',
@@ -324,7 +343,7 @@ const explicitGaps: Record<string, Gap[]> = {
       layer: 'app',
     },
   ],
-  'ai-threats-external-injection:claude-api': [
+  'ai-threats-external-injection:claude-agents': [
     {
       gap: 'Defender for AI Services / Prompt Shields only apply when the model is consumed via Azure AI Model Inference — direct api.anthropic.com calls are out of scope.',
       compensatingControl: 'third-party',
@@ -419,7 +438,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
 
   // ---------- Coding assistants — Microsoft has no native control ----------
-  'coding-prevent-ip-leak:claude-api': [
+  'coding-prevent-ip-leak:claude-agents': [
     {
       gap: 'Microsoft has no native control over Claude Code, Cursor, Codeium, or Codex prompts — the IDE extension talks directly to the vendor.',
       compensatingControl: 'third-party',
@@ -437,7 +456,7 @@ const explicitGaps: Record<string, Gap[]> = {
       layer: 'data',
     },
   ],
-  'coding-govern-tools:claude-api': [
+  'coding-govern-tools:claude-agents': [
     {
       gap: 'No first-party Microsoft catalog of approved coding agents — each IDE extension must be allow-listed manually.',
       compensatingControl: 'process',
@@ -448,7 +467,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
 
   // ---------- SaaS / embedded AI — CASB is the answer ----------
-  'saas-discover-embedded-ai:claude-api': [
+  'saas-discover-embedded-ai:claude-agents': [
     {
       gap: 'Native SaaS admin controls are usually all you get for prompt content inside Notion AI, Slack AI, Einstein, Atlassian Intelligence, Now Assist, Zoom AI Companion.',
       compensatingControl: 'third-party',
@@ -457,7 +476,7 @@ const explicitGaps: Record<string, Gap[]> = {
       layer: 'detect',
     },
   ],
-  'saas-govern-embedded-ai:claude-api': [
+  'saas-govern-embedded-ai:claude-agents': [
     {
       gap: 'Purview cannot label-enforce inside a 3rd-party SaaS AI feature today — enforcement lives in the vendor admin console.',
       compensatingControl: 'third-party',
@@ -488,7 +507,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
 
   // ---------- Non-Azure infrastructure ----------
-  'infra-non-azure-models:claude-api': [
+  'infra-non-azure-models:claude-agents': [
     {
       gap: 'Defender for AI Services does not apply outside Azure — direct Anthropic / OpenAI / Bedrock endpoints are out of scope.',
       compensatingControl: 'third-party',

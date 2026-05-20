@@ -35,6 +35,8 @@ const kindLabel: Record<PlatformKind, string> = {
   microsoft: 'Microsoft',
   openai: 'OpenAI',
   anthropic: 'Anthropic',
+  aws: 'AWS',
+  google: 'Google Cloud',
   custom: 'Custom on Azure',
   saas: 'SaaS apps with embedded AI',
 }

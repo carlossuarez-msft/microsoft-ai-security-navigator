@@ -63,8 +63,8 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Give every agent (Microsoft 365, Copilot Studio, Foundry, third-party) an owner, purpose, identity, and shutdown path.',
     longDescription:
-      'Agent 365 is the per-user control plane for Microsoft and pre-integrated third-party agents (scheduled GA on May 1, 2026; currently in pre-GA). Microsoft recommends Entra P1/P2 (or Entra Suite) plus Purview DLP for full Agent 365 coverage. Entra Agent ID gives agents their own identity. Some agent-specific capabilities remain in Frontier preview.',
-    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
+      'Agent 365 is the per-user control plane for Microsoft and pre-integrated third-party agents (GA since May 1, 2026). Microsoft recommends Entra P1/P2 (or Entra Suite) plus Purview DLP for full Agent 365 coverage. Entra Agent ID gives agents their own identity. Some agent-specific capabilities remain in Frontier preview.',
+    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'aws', 'google', 'custom', 'saas'],
   },
   {
     id: 'agents-runtime-threats',
@@ -74,8 +74,8 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Find jailbreaks, wallet abuse, credential theft, and abnormal tool calls on Foundry and Copilot Studio agents.',
     longDescription:
-      'Defender for AI Services raises runtime alerts on Azure-hosted agents (Foundry agent threat protection is in public preview). Copilot Studio agents inherit Purview audit and IRM signals. Third-party agents the org adopts are covered only to the extent they appear in Agent 365 partner integrations.',
-    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
+      'Defender for AI Services raises runtime alerts on Azure-hosted agents (Foundry agent threat protection is in public preview). Copilot Studio agents inherit Purview audit and IRM signals. Third-party agents the org adopts are covered only to the extent they appear in Agent 365 partner integrations or Defender XDR AI agent inventory (which today covers Microsoft Copilot Studio, Microsoft Foundry, AWS Bedrock, and GCP Vertex AI).',
+    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'aws', 'google', 'custom', 'saas'],
   },
   {
     id: 'agents-data-grounding',
@@ -86,7 +86,7 @@ export const useCases: UseCase[] = [
       'Limit agent grounding scope and tool permissions so agents do not exfiltrate or overshare.',
     longDescription:
       'Purview DLP for agents, SharePoint Advanced Management restricted-content discovery (for Copilot grounding), and Entra Agent ID permissions are the main levers. Treat each agent like a privileged identity with its own data boundary.',
-    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
+    applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'aws', 'google', 'custom', 'saas'],
   },
 
   // ---------- Protect AI Apps you build ----------

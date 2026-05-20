@@ -2,7 +2,14 @@ export type Status = 'GA' | 'Preview' | 'Validate'
 
 export type ControlType = 'Prevent' | 'Detect' | 'Respond' | 'Govern' | 'Measure'
 
-export type PlatformKind = 'microsoft' | 'openai' | 'anthropic' | 'custom' | 'saas'
+export type PlatformKind =
+  | 'anthropic'
+  | 'aws'
+  | 'custom'
+  | 'google'
+  | 'microsoft'
+  | 'openai'
+  | 'saas'
 
 export interface PlaybookStep {
   tool: string
