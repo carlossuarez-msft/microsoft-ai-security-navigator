@@ -1507,16 +1507,17 @@ dd {
 
 .layer-card__body { min-width: 0; }
 
+/* Layer card body uses an explicit 2-col x 2-row grid so that BOTH column
+   headings sit in row 1 (top-aligned on a shared baseline) and BOTH content
+   blocks sit in row 2 (same starting Y), regardless of how tall either side
+   ends up being. The two columns are independent vertically below row 2. */
 .layer-card__cols {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: var(--cp-sp-6);
-}
-
-.layer-col {
-  display: grid;
-  gap: var(--cp-sp-3);
-  min-width: 0;
+  grid-template-rows: auto 1fr;
+  column-gap: var(--cp-sp-6);
+  row-gap: var(--cp-sp-3);
+  align-items: start;
 }
 
 .layer-col__head {
@@ -1529,6 +1530,31 @@ dd {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: var(--cp-sp-2);
+  border-bottom: 1px solid var(--cp-divider);
+  align-self: end;
+}
+
+.layer-col__head--ms { grid-column: 1; grid-row: 1; }
+.layer-col__head--gap { grid-column: 2; grid-row: 1; }
+
+.layer-col__body { min-width: 0; align-self: start; }
+.layer-col__body--ms { grid-column: 1; grid-row: 2; }
+.layer-col__body--gap { grid-column: 2; grid-row: 2; }
+
+/* Soft bordered box used for the "no tool" / "no gap" empty state - matches
+   the visual weight of a real tool-row / gap-row so the two columns stay
+   aligned and the heading-to-content distance is the same on both sides. */
+.layer-col__empty-box {
+  margin: 0;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--cp-text-muted);
+  background: var(--cp-surface-soft);
+  border: 1px dashed var(--cp-border);
+  border-radius: var(--cp-r-md);
+  padding: var(--cp-sp-3) var(--cp-sp-4);
+  line-height: 1.5;
 }
 
 .layer-col__empty {
@@ -1681,8 +1707,18 @@ dd {
   }
   .layer-card__cols {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-flow: row;
     gap: var(--cp-sp-4);
   }
+  .layer-col__head--ms,
+  .layer-col__head--gap,
+  .layer-col__body--ms,
+  .layer-col__body--gap {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .layer-col__head { align-self: start; }
 }
 
 @media (max-width: 720px) {

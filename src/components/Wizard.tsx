@@ -624,14 +624,18 @@ function LayerCard({ index, layer, tools, gaps, platform, isPrimary }: LayerCard
           </div>
         ) : (
           <div className="layer-card__cols">
-            <section className="layer-col">
-              <h3 className="layer-col__head">
-                <span className="dot dot--success" aria-hidden="true" /> Microsoft tools ({toolCount})
-              </h3>
+            <h3 className="layer-col__head layer-col__head--ms">
+              <span className="dot dot--success" aria-hidden="true" /> Microsoft tools ({toolCount})
+            </h3>
+            <h3 className="layer-col__head layer-col__head--gap">
+              <span className="dot dot--danger" aria-hidden="true" /> Gaps &amp; compensating controls ({gapCount})
+            </h3>
+
+            <div className="layer-col__body layer-col__body--ms">
               {tools.length === 0 ? (
-                <p className="layer-col__empty">
+                <div className="layer-col__empty-box" role="note">
                   No Microsoft tool covers this layer for {platform.name}. See compensating controls &rarr;
-                </p>
+                </div>
               ) : (
                 <ul className="tool-list">
                   {tools.map((t, i) => (
@@ -648,14 +652,13 @@ function LayerCard({ index, layer, tools, gaps, platform, isPrimary }: LayerCard
                   ))}
                 </ul>
               )}
-            </section>
+            </div>
 
-            <section className="layer-col">
-              <h3 className="layer-col__head">
-                <span className="dot dot--danger" aria-hidden="true" /> Gaps &amp; compensating controls ({gapCount})
-              </h3>
+            <div className="layer-col__body layer-col__body--gap">
               {gaps.length === 0 ? (
-                <p className="layer-col__empty">No tracked gap for this layer on {platform.name}.</p>
+                <div className="layer-col__empty-box" role="note">
+                  No tracked gap for this layer on {platform.name}.
+                </div>
               ) : (
                 <ul className="gap-list">
                   {gaps.map((g, i) => (
@@ -684,7 +687,7 @@ function LayerCard({ index, layer, tools, gaps, platform, isPrimary }: LayerCard
                   ))}
                 </ul>
               )}
-            </section>
+            </div>
           </div>
         )}
       </div>
