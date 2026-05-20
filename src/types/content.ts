@@ -43,7 +43,7 @@ export interface Platform {
   gaps: Gap[]
   sourceIds: string[]
   /**
-   * Explicit allow-list of workloads this platform belongs in. Authoritative —
+   * Explicit allow-list of workloads this platform belongs in. Authoritative -
    * used by Step 2 to filter the platform picker and by Step 3 to scope the plan.
    */
   applicableWorkloads: WorkloadCategory[]

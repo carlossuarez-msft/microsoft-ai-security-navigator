@@ -8,7 +8,7 @@ export const scenarios: Scenario[] = [
     customerQuestion:
       'If we give Copilot to thousands of users, will it expose information they technically can access but should not see?',
     whyItMatters:
-      'Microsoft 365 Copilot can amplify existing Microsoft Graph permissions, overshared SharePoint content, and unlabeled sensitive data. Purview support for Copilot is the strongest in the Microsoft AI portfolio — sensitivity labels, encryption, and in-line DLP are all enforced — unlike for third-party AI surfaces such as ChatGPT Enterprise or Claude where label/DLP coverage is limited.',
+      'Microsoft 365 Copilot can amplify existing Microsoft Graph permissions, overshared SharePoint content, and unlabeled sensitive data. Purview support for Copilot is the strongest in the Microsoft AI portfolio - sensitivity labels, encryption, and in-line DLP are all enforced - unlike for third-party AI surfaces such as ChatGPT Enterprise or Claude where label/DLP coverage is limited.',
     risks: [
       'Overshared SharePoint sites become easier to discover.',
       'Sensitive files lack labels, DLP policy, or lifecycle controls.',
@@ -115,7 +115,7 @@ export const scenarios: Scenario[] = [
       { label: 'Use identity-first access', description: 'Use Entra ID, managed identities, RBAC, and least-privilege roles.' },
       { label: 'Protect secrets', description: 'Use Key Vault and remove broad embedded keys wherever possible.' },
       { label: 'Add AI safety controls', description: 'Use Azure AI Content Safety Prompt Shields (the producer of jailbreak/prompt-injection signals), Foundry guardrails, content filters, and evaluations. Defender for AI Services consumes Prompt Shields signals to generate alerts.' },
-      { label: 'Enable threat protection', description: 'Use Microsoft Defender for AI Services (GA May 1, 2025; formerly "threat protection for AI workloads") for Azure OpenAI and Azure AI Model Inference runtime alerts (text tokens only; commercial cloud only — no Azure Government, 21Vianet, or connected AWS accounts). Threat protection for Foundry-built AI agents is in public preview. Route alerts to Defender XDR / Sentinel.' },
+      { label: 'Enable threat protection', description: 'Use Microsoft Defender for AI Services (GA May 1, 2025; formerly "threat protection for AI workloads") for Azure OpenAI and Azure AI Model Inference runtime alerts (text tokens only; commercial cloud only - no Azure Government, 21Vianet, or connected AWS accounts). Threat protection for Foundry-built AI agents is in public preview. Route alerts to Defender XDR / Sentinel.' },
     ],
     productRoles: [
       { role: 'AI app platform', products: 'Azure AI Foundry' },

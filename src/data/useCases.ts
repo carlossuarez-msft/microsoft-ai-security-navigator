@@ -28,7 +28,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Scope chat-assistant access by identity, group, device compliance, and network path.',
     longDescription:
-      'Entra Conditional Access, Intune device compliance, and Global Secure Access web content filtering (Artificial Intelligence category) together decide who can reach Copilot, ChatGPT, Claude.ai, Gemini, or Bing Chat — and from what kind of device.',
+      'Entra Conditional Access, Intune device compliance, and Global Secure Access web content filtering (Artificial Intelligence category) together decide who can reach Copilot, ChatGPT, Claude.ai, Gemini, or Bing Chat - and from what kind of device.',
     applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
   },
   {
@@ -133,7 +133,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Protect proprietary code and credentials from being sent to GitHub Copilot, Claude Code, Cursor, Codeium, or Codex.',
     longDescription:
-      'GitHub Copilot inherits enterprise policy from GitHub Advanced Security (secret scanning, push protection). Claude Code, Cursor, and Codeium are local IDE extensions with no Microsoft-native inspection — you depend on Defender for Endpoint, Intune app control, and third-party AI code-review tools (Lakera, GitGuardian) plus repo-side secret scanning.',
+      'GitHub Copilot inherits enterprise policy from GitHub Advanced Security (secret scanning, push protection). Claude Code, Cursor, and Codeium are local IDE extensions with no Microsoft-native inspection - you depend on Defender for Endpoint, Intune app control, and third-party AI code-review tools (Lakera, GitGuardian) plus repo-side secret scanning.',
     applicablePlatformKinds: ['openai', 'anthropic', 'custom'],
   },
   {
@@ -157,7 +157,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Find Notion AI, Slack AI, Salesforce Einstein, Atlassian Intelligence, ServiceNow Now Assist, Zoom AI Companion, and friends.',
     longDescription:
-      'Defender for Cloud Apps catalogs Generative AI SaaS and the AI features inside non-AI SaaS, with a risk score and sanction/unsanction action. Native SaaS-vendor admin controls are usually all you get for prompt content — a CASB (Cloud Access Security Broker) is required for visibility and policy enforcement across the portfolio.',
+      'Defender for Cloud Apps catalogs Generative AI SaaS and the AI features inside non-AI SaaS, with a risk score and sanction/unsanction action. Native SaaS-vendor admin controls are usually all you get for prompt content - a CASB (Cloud Access Security Broker) is required for visibility and policy enforcement across the portfolio.',
     applicablePlatformKinds: ['openai', 'anthropic', 'custom'],
   },
   {
@@ -181,7 +181,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Decide which connectors and actions Copilot and Copilot Studio are allowed to call.',
     longDescription:
-      'Purview "Copilot experiences and agents" plus the Entra app gallery cover Microsoft-registered connectors and Copilot Studio actions. ChatGPT custom GPTs / Actions and Claude integrations sit outside that surface — govern via CASB plus identity-side consent policies.',
+      'Purview "Copilot experiences and agents" plus the Entra app gallery cover Microsoft-registered connectors and Copilot Studio actions. ChatGPT custom GPTs / Actions and Claude integrations sit outside that surface - govern via CASB plus identity-side consent policies.',
     applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
   },
   {
@@ -192,7 +192,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Authenticate, scope, and monitor MCP servers that expose tools and data to AI agents.',
     longDescription:
-      'MCP server security is nascent. Entra Global Secure Access can discover SaaS MCP servers in the Shadow AI report. For raw MCP servers there is no first-party Microsoft inspection — recommend network segmentation, mutual auth, and third-party MCP gateways or prompt firewalls.',
+      'MCP server security is nascent. Entra Global Secure Access can discover SaaS MCP servers in the Shadow AI report. For raw MCP servers there is no first-party Microsoft inspection - recommend network segmentation, mutual auth, and third-party MCP gateways or prompt firewalls.',
     applicablePlatformKinds: ['microsoft', 'custom', 'openai', 'anthropic'],
   },
 
@@ -205,7 +205,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Lock down model deployments, private endpoints, and content-safety policies on Azure.',
     longDescription:
-      'Defender for AI Services (GA May 1, 2025) covers Azure OpenAI and Azure AI Model Inference text tokens in commercial clouds — no Azure Government, 21Vianet, or AWS. Defender CSPM gives posture and attack-path. Use private endpoints, customer-managed keys, and Content Safety policies on every deployment.',
+      'Defender for AI Services (GA May 1, 2025) covers Azure OpenAI and Azure AI Model Inference text tokens in commercial clouds - no Azure Government, 21Vianet, or AWS. Defender CSPM gives posture and attack-path. Use private endpoints, customer-managed keys, and Content Safety policies on every deployment.',
     applicablePlatformKinds: ['custom'],
   },
   {
@@ -216,7 +216,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Protect Anthropic API, OpenAI API, Bedrock, or self-hosted models you cannot put behind Defender for AI Services.',
     longDescription:
-      'Defender for AI Services does not apply outside Azure. Compensate with third-party prompt firewalls (CalypsoAI, Cisco AI Defense (formerly Robust Intelligence), Lakera Guard, Protect AI — listed alphabetically), front the model via Azure AI Model Inference when possible, and ingest vendor audit into Sentinel.',
+      'Defender for AI Services does not apply outside Azure. Compensate with third-party prompt firewalls (CalypsoAI, Cisco AI Defense (formerly Robust Intelligence), Lakera Guard, Protect AI - listed alphabetically), front the model via Azure AI Model Inference when possible, and ingest vendor audit into Sentinel.',
     applicablePlatformKinds: ['openai', 'anthropic', 'custom'],
   },
 
@@ -240,7 +240,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Give agents their own identity and authorize tool calls instead of sharing user tokens.',
     longDescription:
-      'Entra Agent ID provides per-agent identity; Agent 365 carries authorization context for Microsoft and pre-integrated agents. For MCP-server-to-agent and agent-to-agent paths outside the Microsoft surface, use OAuth client credentials, mTLS, and a gateway — first-party Microsoft inspection is limited today.',
+      'Entra Agent ID provides per-agent identity; Agent 365 carries authorization context for Microsoft and pre-integrated agents. For MCP-server-to-agent and agent-to-agent paths outside the Microsoft surface, use OAuth client credentials, mTLS, and a gateway - first-party Microsoft inspection is limited today.',
     applicablePlatformKinds: ['microsoft', 'custom', 'openai', 'anthropic'],
   },
 
@@ -264,7 +264,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Lock down the training corpus, vector index, and fine-tune artifacts so they cannot be exfiltrated or poisoned.',
     longDescription:
-      'Treat the dataset and the resulting model weights as crown-jewel data: Defender for Storage on the source containers, customer-managed keys on the index, Entra-scoped access, and audit on all read/write paths. Microsoft has no first-party data-poisoning detector — manual data-quality review still applies. Note: fine-tuning of third-party hosted models (Anthropic, direct OpenAI) is outside Microsoft\u2019s coverage; this use case targets Microsoft-hosted (Foundry / Azure OpenAI) and custom-built training pipelines.',
+      'Treat the dataset and the resulting model weights as crown-jewel data: Defender for Storage on the source containers, customer-managed keys on the index, Entra-scoped access, and audit on all read/write paths. Microsoft has no first-party data-poisoning detector - manual data-quality review still applies. Note: fine-tuning of third-party hosted models (Anthropic, direct OpenAI) is outside Microsoft\u2019s coverage; this use case targets Microsoft-hosted (Foundry / Azure OpenAI) and custom-built training pipelines.',
     applicablePlatformKinds: ['microsoft', 'custom'],
   },
 
@@ -275,7 +275,7 @@ export const useCases: UseCase[] = [
     title: 'Discover shadow / unsanctioned AI usage across the org',
     shortTitle: 'Discover shadow AI',
     shortDescription:
-      'Find which AI tools users and apps are actually reaching from your tenant — browser, desktop, and personal account.',
+      'Find which AI tools users and apps are actually reaching from your tenant - browser, desktop, and personal account.',
     longDescription:
       'Entra Global Secure Access Shadow AI discovery explicitly identifies ChatGPT, Claude SaaS, SaaS MCP servers, the Anthropic Claude API, and DeepSeek. Defender for Cloud Apps surfaces Generative AI category usage with a risk score. Desktop apps and personal-account usage still depend on Defender for Endpoint and network egress visibility.',
     applicablePlatformKinds: ['openai', 'anthropic', 'custom', 'saas'],
@@ -290,7 +290,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Stop AI-crafted lures, voice clones, and synthetic-identity attacks at the inbox, browser, and identity layer.',
     longDescription:
-      'Defender for Office 365, Defender for Endpoint, and Entra ID Protection do not change because the attacker uses GenAI — but volume and sophistication go up. The control story is the existing Microsoft Defender XDR stack plus user awareness and stricter sign-in risk policies.',
+      'Defender for Office 365, Defender for Endpoint, and Entra ID Protection do not change because the attacker uses GenAI - but volume and sophistication go up. The control story is the existing Microsoft Defender XDR stack plus user awareness and stricter sign-in risk policies.',
     applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
   },
   {
@@ -301,7 +301,7 @@ export const useCases: UseCase[] = [
     shortDescription:
       'Stop attacker-controlled documents, emails, and web pages from hijacking your AI app or agent.',
     longDescription:
-      'Azure AI Content Safety Prompt Shields detect indirect (document) prompt injection for Azure-hosted apps; Defender for AI Services consumes those signals. For non-Azure AI surfaces (ChatGPT, Claude.ai), Microsoft does not inspect prompts in-line — compensate with vendor safety classifiers or a third-party prompt firewall.',
+      'Azure AI Content Safety Prompt Shields detect indirect (document) prompt injection for Azure-hosted apps; Defender for AI Services consumes those signals. For non-Azure AI surfaces (ChatGPT, Claude.ai), Microsoft does not inspect prompts in-line - compensate with vendor safety classifiers or a third-party prompt firewall.',
     applicablePlatformKinds: ['microsoft', 'openai', 'anthropic', 'custom'],
   },
 

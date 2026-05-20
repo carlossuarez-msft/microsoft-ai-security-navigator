@@ -159,12 +159,12 @@ const stepTitles: Record<WizardStep, string> = {
 
 function StepProgress({ step, selectedWorkload, selectedPlatform, onGoToStep }: StepProgressProps) {
   const items: Array<{ index: WizardStep; label: string; value: string; enabled: boolean }> = [
-    { index: 1, label: 'Workload', value: selectedWorkload?.title ?? '—', enabled: true },
-    { index: 2, label: 'Platform', value: selectedPlatform?.name ?? '—', enabled: !!selectedWorkload },
+    { index: 1, label: 'Workload', value: selectedWorkload?.title ?? '-', enabled: true },
+    { index: 2, label: 'Platform', value: selectedPlatform?.name ?? '-', enabled: !!selectedWorkload },
     {
       index: 3,
       label: 'Defense in depth',
-      value: selectedPlatform ? 'Layered plan' : '—',
+      value: selectedPlatform ? 'Layered plan' : '-',
       enabled: !!selectedWorkload && !!selectedPlatform,
     },
   ]
@@ -172,7 +172,7 @@ function StepProgress({ step, selectedWorkload, selectedPlatform, onGoToStep }: 
   return (
     <nav className="step-progress" aria-label="Wizard progress">
       <p className="step-progress__title">
-        Step {step} of 3 — <span>{stepTitles[step]}</span>
+        Step {step} of 3 - <span>{stepTitles[step]}</span>
       </p>
       <ol className="step-progress__list">
         {items.map((item, i) => {

@@ -27,7 +27,7 @@ export const productFamilies: ProductFamily[] = [
     id: 'purview',
     name: 'Microsoft Purview',
     plainLanguageRole:
-      'Protects sensitive data used by AI through DSPM, classification, DLP, audit, eDiscovery, IRM, and retention. Coverage differs by AI surface: Copilot (full — labels, encryption, DLP, retention), Enterprise AI apps such as ChatGPT Enterprise (audit, classification, IRM, eDiscovery — no labels/encryption/DLP), and Other AI apps such as Claude/Gemini (DLP and classification via browser extension / Edge / network; no labels; retention only for ChatGPT, Microsoft Chat (consumer version), Gemini, DeepSeek — Claude not on the supported retention list).',
+      'Protects sensitive data used by AI through DSPM, classification, DLP, audit, eDiscovery, IRM, and retention. Coverage differs by AI surface: Copilot (full - labels, encryption, DLP, retention), Enterprise AI apps such as ChatGPT Enterprise (audit, classification, IRM, eDiscovery - no labels/encryption/DLP), and Other AI apps such as Claude/Gemini (DLP and classification via browser extension / Edge / network; no labels; retention only for ChatGPT, Microsoft Chat (consumer version), Gemini, DeepSeek - Claude not on the supported retention list).',
     whereAdminsWork: 'Microsoft Purview portal',
     controlTypes: ['Prevent', 'Detect', 'Govern', 'Measure'],
     scenarioIds: ['m365-copilot', 'public-ai-tools'],
@@ -60,6 +60,6 @@ export const productFamilies: ProductFamily[] = [
     sourceIds: ['defender-ai-services'],
     status: 'GA',
     caveat:
-      'Supports Azure OpenAI and Azure AI Model Inference text tokens only (no image/audio). Commercial clouds only — not available in Azure Government, Azure operated by 21Vianet, or connected AWS accounts. Threat protection for AI agents built with Foundry is in public preview (Feb 2026).',
+      'Supports Azure OpenAI and Azure AI Model Inference text tokens only (no image/audio). Commercial clouds only - not available in Azure Government, Azure operated by 21Vianet, or connected AWS accounts. Threat protection for AI agents built with Foundry is in public preview (Feb 2026).',
   },
 ]

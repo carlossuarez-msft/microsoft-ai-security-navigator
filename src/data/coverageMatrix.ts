@@ -47,7 +47,7 @@ export const layerSubtitle: Record<Layer, string> = {
 type LaneKey = keyof PlatformPlaybook
 
 // Map an existing playbook step (tool name + action context) to a defense-in-depth layer.
-// Hard-coded deterministic mapping — order matters, most specific first.
+// Hard-coded deterministic mapping - order matters, most specific first.
 // `action` is provided as additional context for ambiguous tool names
 // (e.g. "Global Secure Access" can be network OR identity depending on usage).
 function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey): Layer {
@@ -55,7 +55,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   const a = (action ?? '').toLowerCase()
   const ctx = `${t} ${a}`
 
-  // Tool-name anchored governance rules — run first so an "audit"-named tool wins over
+  // Tool-name anchored governance rules - run first so an "audit"-named tool wins over
   // downstream matches on IRM/DSPM/labels that appear in its action text.
   if (/purview audit|unified audit log|\bediscovery\b|e-discovery/.test(t)) return 'govern'
   if (/compliance manager|data lifecycle management|lifecycle management|retention policy|\bretention\b|service trust portal|privacy management/.test(t))
@@ -72,7 +72,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
       /inventory|admin center|registration|registry|catalog|govern|third[- ]party|publish|publication target/.test(`${t} ${a}`))
     return 'govern'
 
-  // 1) Endpoint & device — Intune, Defender for Endpoint, Endpoint DLP, AppLocker/WDAC, Edge browser mgmt
+  // 1) Endpoint & device - Intune, Defender for Endpoint, Endpoint DLP, AppLocker/WDAC, Edge browser mgmt
   if (
     /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
       ctx,
@@ -80,7 +80,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'endpoint'
 
-  // 2) Detect — Defender XDR, Sentinel, IRM, Communication Compliance, Defender for AI Services.
+  // 2) Detect - Defender XDR, Sentinel, IRM, Communication Compliance, Defender for AI Services.
   // Pulled early so XDR/Sentinel/IRM/DfAIS beat broader matches downstream (DSPM, GSA, etc.)
   // Note: "security copilot" deliberately excluded so steps that protect the
   // Security Copilot platform itself can land in identity/network/endpoint/govern.
@@ -93,7 +93,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'detect'
 
-  // 2) Network & edge — GSA web/internet filtering, Shadow-AI discovery, web content, DfCA web/cloud discovery,
+  // 2) Network & edge - GSA web/internet filtering, Shadow-AI discovery, web content, DfCA web/cloud discovery,
   //    network protection, SSE/SASE, network DLP, firewall, egress
   if (
     /web content filtering|internet access|network protection|shadow ai discovery|\bsse\b|\bsase\b|network data security|cloud app catalog|generative ai category|network egress|firewall|private endpoint|\begress\b/.test(
@@ -106,7 +106,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   if (/defender for cloud apps/.test(t) && /discover|catalog|category|sanction|unsanction|shadow|web/.test(a))
     return 'network'
 
-  // 3) Identity & access — Entra, Conditional Access, Agent 365, Entra Agent ID, Verified ID, SSO
+  // 3) Identity & access - Entra, Conditional Access, Agent 365, Entra Agent ID, Verified ID, SSO
   if (
     /\bentra\b|conditional access|\bsso\b|\bsaml\b|agent 365|agent id|verified id|access review|managed identit|workload id/.test(
       ctx,
@@ -122,7 +122,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   // 6) Detect was hoisted above; only residual DfCA falls through here.
   if (/defender for cloud apps/.test(t)) return 'detect'
 
-  // 4) Data security — Purview sensitivity labels / DLP / DSPM / Information Protection / classification /
+  // 4) Data security - Purview sensitivity labels / DLP / DSPM / Information Protection / classification /
   //    SharePoint Advanced Management, grounding/RAG data discovery
   if (
     /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security|file polic|session polic/.test(
@@ -131,7 +131,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'data'
 
-  // 5) App & workload — Content Safety, Prompt Shields, Azure OpenAI / Foundry,
+  // 5) App & workload - Content Safety, Prompt Shields, Azure OpenAI / Foundry,
   //    Key Vault for app secrets, APIM / model gateway. (Defender for AI Services moved to detect.)
   if (
     /content safety|prompt shield|azure openai|azure ai foundry|\bfoundry\b|defender for key vault|defender for storage|\bkey vault\b|azure api management|\bapim\b|model gateway|model inference|defender csp|defender for cloud(?! apps)/.test(
@@ -140,7 +140,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'app'
 
-  // 7) Governance, audit & compliance — eDiscovery, sanctioned catalogs, AUP, copilot admin reports, etc.
+  // 7) Governance, audit & compliance - eDiscovery, sanctioned catalogs, AUP, copilot admin reports, etc.
   if (
     /purview audit|unified audit|\baudit\b|ediscovery|e-discovery|compliance manager|lifecycle management|retention|service trust portal|privacy management|copilot reports|admin center|sanctioned|acceptable[- ]use|catalog|procurement|adoption|inventory/.test(
       ctx,
@@ -148,7 +148,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   )
     return 'govern'
 
-  // Final fallback — derive from lane
+  // Final fallback - derive from lane
   switch (fallbackLane) {
     case 'accessControl':
       return 'identity'
@@ -166,7 +166,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
 }
 
 // For each use case, mark which playbook lanes are the *primary focus*.
-// This is now a UI emphasis hint only — getCoverage ALWAYS iterates all five lanes.
+// This is now a UI emphasis hint only - getCoverage ALWAYS iterates all five lanes.
 // Defense in depth means the entire layered picture is always shown.
 export const useCasePrimaryLanes: Record<string, LaneKey[]> = {
   // Chat
@@ -226,7 +226,7 @@ export const useCasePrimaryLanes: Record<string, LaneKey[]> = {
 const explicitGaps: Record<string, Gap[]> = {
   'chat-prevent-data-leak:m365-copilot': [
     {
-      gap: 'Copilot still surfaces any item the user is technically permissioned to see — DLP cannot fix oversharing in the underlying SharePoint sites.',
+      gap: 'Copilot still surfaces any item the user is technically permissioned to see - DLP cannot fix oversharing in the underlying SharePoint sites.',
       compensatingControl: 'process',
       suggestion:
         'Run SharePoint Advanced Management restricted-content discovery and remediate oversharing BEFORE broad Copilot rollout.',
@@ -235,7 +235,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'chat-prevent-data-leak:chatgpt-enterprise': [
     {
-      gap: 'Purview cannot enforce sensitivity labels, label-based encryption, or in-line DLP on ChatGPT Enterprise prompts — detection is after-the-fact only.',
+      gap: 'Purview cannot enforce sensitivity labels, label-based encryption, or in-line DLP on ChatGPT Enterprise prompts - detection is after-the-fact only.',
       compensatingControl: 'third-party',
       suggestion:
         'Layer a pre-prompt redaction proxy or DLP gateway (Netskope, Zscaler, Palo Alto AI Access Security) in front of chat.openai.com, or rely on IRM + acceptable-use policy.',
@@ -261,7 +261,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'chat-prevent-data-leak:claude-desktop': [
     {
-      gap: 'Purview browser extension does not see the native Claude Desktop app — Edge / DSPM-for-AI flows do not apply.',
+      gap: 'Purview browser extension does not see the native Claude Desktop app - Edge / DSPM-for-AI flows do not apply.',
       compensatingControl: 'third-party',
       suggestion:
         'Combine Endpoint DLP + Intune app control + network egress controls; consider a CASB or endpoint AI-DLP product with native Claude Desktop integration.',
@@ -280,7 +280,7 @@ const explicitGaps: Record<string, Gap[]> = {
 
   'chat-audit-ediscovery:claude-web': [
     {
-      gap: 'Microsoft Purview docs restrict eDiscovery, Communication Compliance, AND retention (the "Other AI apps" triad) to ChatGPT, Microsoft Chat (consumer version), Google Gemini, and DeepSeek — Claude is excluded from all three. Browser-extension Audit and IRM do flow for Claude on Edge.',
+      gap: 'Microsoft Purview docs restrict eDiscovery, Communication Compliance, AND retention (the "Other AI apps" triad) to ChatGPT, Microsoft Chat (consumer version), Google Gemini, and DeepSeek - Claude is excluded from all three. Browser-extension Audit and IRM do flow for Claude on Edge.',
       compensatingControl: 'third-party',
       suggestion:
         'Export the Anthropic workspace audit log on a recurring schedule into Sentinel via a logic app or third-party AI DLP gateway; supplement with a third-party AI governance platform for prompt-level retention and eDiscovery.',
@@ -290,7 +290,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'chat-audit-ediscovery:claude-desktop': [
     {
-      gap: 'No prompt-level audit, classification, or retention via Microsoft for Claude Desktop — the browser extension cannot reach the native app.',
+      gap: 'No prompt-level audit, classification, or retention via Microsoft for Claude Desktop - the browser extension cannot reach the native app.',
       compensatingControl: 'process',
       suggestion:
         'Document this gap in the AI governance program; if retention is mandatory, sanction only Claude.ai in Edge or move the workload to an enterprise Anthropic plan with vendor-side audit export to SIEM.',
@@ -309,7 +309,7 @@ const explicitGaps: Record<string, Gap[]> = {
 
   'ai-threats-external-injection:chatgpt-enterprise': [
     {
-      gap: 'Microsoft does not inspect prompts in-line at chat.openai.com — Prompt Shields is for Azure-hosted apps only.',
+      gap: 'Microsoft does not inspect prompts in-line at chat.openai.com - Prompt Shields is for Azure-hosted apps only.',
       compensatingControl: 'third-party',
       suggestion:
         'Rely on OpenAI safety classifiers (per vendor docs) plus a prompt-firewall / AI gateway (CalypsoAI, Cisco AI Defense (formerly Robust Intelligence), Lakera Guard) in front of the workspace.',
@@ -345,7 +345,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'ai-threats-external-injection:claude-agents': [
     {
-      gap: 'Defender for AI Services / Prompt Shields only apply when the model is consumed via Azure AI Model Inference — direct api.anthropic.com calls are out of scope.',
+      gap: 'Defender for AI Services / Prompt Shields only apply when the model is consumed via Azure AI Model Inference - direct api.anthropic.com calls are out of scope.',
       compensatingControl: 'third-party',
       suggestion:
         'Front the model via Azure AI Model Inference where possible; otherwise deploy a 3rd-party prompt firewall (Cisco AI Defense (formerly Robust Intelligence), Lakera Guard) in the app path.',
@@ -399,7 +399,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'govern-audit-lifecycle:claude-web': [
     {
-      gap: 'Prompt retention is not supported for Claude — investigations are point-in-time via the browser extension.',
+      gap: 'Prompt retention is not supported for Claude - investigations are point-in-time via the browser extension.',
       compensatingControl: 'third-party',
       suggestion:
         'Combine vendor-side audit export with SIEM ingestion; consider a 3rd-party AI governance platform.',
@@ -429,7 +429,7 @@ const explicitGaps: Record<string, Gap[]> = {
 
   'apps-rag-pipeline:azure-foundry-custom': [
     {
-      gap: 'Microsoft tooling can find sensitive grounding data but cannot guarantee the retrieval pipeline excludes it — that is an app-design decision.',
+      gap: 'Microsoft tooling can find sensitive grounding data but cannot guarantee the retrieval pipeline excludes it - that is an app-design decision.',
       compensatingControl: 'process',
       suggestion:
         'Treat the retrieval index as a privileged data store; require sensitivity-label-aware filtering in the app code.',
@@ -437,10 +437,10 @@ const explicitGaps: Record<string, Gap[]> = {
     },
   ],
 
-  // ---------- Coding assistants — Microsoft has no native control ----------
+  // ---------- Coding assistants - Microsoft has no native control ----------
   'coding-prevent-ip-leak:claude-agents': [
     {
-      gap: 'Microsoft has no native control over Claude Code, Cursor, Codeium, or Codex prompts — the IDE extension talks directly to the vendor.',
+      gap: 'Microsoft has no native control over Claude Code, Cursor, Codeium, or Codex prompts - the IDE extension talks directly to the vendor.',
       compensatingControl: 'third-party',
       suggestion:
         'Combine GitHub Advanced Security secret scanning + Defender for Endpoint + Intune app control with a 3rd-party AI code-review tool (Lakera, GitGuardian) and repo-side push protection.',
@@ -458,7 +458,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'coding-govern-tools:claude-agents': [
     {
-      gap: 'No first-party Microsoft catalog of approved coding agents — each IDE extension must be allow-listed manually.',
+      gap: 'No first-party Microsoft catalog of approved coding agents - each IDE extension must be allow-listed manually.',
       compensatingControl: 'process',
       suggestion:
         'Maintain an Intune app-control allow-list of approved IDE extensions and desktop coding agents; block all others. Use Defender for Endpoint network protection to block unsanctioned model endpoints.',
@@ -466,7 +466,7 @@ const explicitGaps: Record<string, Gap[]> = {
     },
   ],
 
-  // ---------- SaaS / embedded AI — CASB is the answer ----------
+  // ---------- SaaS / embedded AI - CASB is the answer ----------
   'saas-discover-embedded-ai:claude-agents': [
     {
       gap: 'Native SaaS admin controls are usually all you get for prompt content inside Notion AI, Slack AI, Einstein, Atlassian Intelligence, Now Assist, Zoom AI Companion.',
@@ -478,7 +478,7 @@ const explicitGaps: Record<string, Gap[]> = {
   ],
   'saas-govern-embedded-ai:claude-agents': [
     {
-      gap: 'Purview cannot label-enforce inside a 3rd-party SaaS AI feature today — enforcement lives in the vendor admin console.',
+      gap: 'Purview cannot label-enforce inside a 3rd-party SaaS AI feature today - enforcement lives in the vendor admin console.',
       compensatingControl: 'third-party',
       suggestion:
         'Combine vendor-side scoping (turn off unsafe features, scope to least data) with CASB session policies for inline control.',
@@ -509,7 +509,7 @@ const explicitGaps: Record<string, Gap[]> = {
   // ---------- Non-Azure infrastructure ----------
   'infra-non-azure-models:claude-agents': [
     {
-      gap: 'Defender for AI Services does not apply outside Azure — direct Anthropic / OpenAI / Bedrock endpoints are out of scope.',
+      gap: 'Defender for AI Services does not apply outside Azure - direct Anthropic / OpenAI / Bedrock endpoints are out of scope.',
       compensatingControl: 'third-party',
       suggestion:
         'Front the model via Azure AI Model Inference when possible, or deploy a 3rd-party prompt firewall (Cisco AI Defense (formerly Robust Intelligence), Lakera Guard, Protect AI) and ingest vendor audit into Sentinel.',
@@ -540,7 +540,7 @@ const explicitGaps: Record<string, Gap[]> = {
   // ---------- Fine-tune data ----------
   'data-protect-finetune:azure-foundry-custom': [
     {
-      gap: 'Microsoft has no first-party data-poisoning detector for fine-tune datasets — pipeline integrity is on you.',
+      gap: 'Microsoft has no first-party data-poisoning detector for fine-tune datasets - pipeline integrity is on you.',
       compensatingControl: 'process',
       suggestion:
         'Require code review and provenance signing on all training data; restrict dataset write access via Entra PIM and audit every change.',
@@ -569,13 +569,13 @@ export function getCoverage(useCase: UseCase, platform: Platform): Coverage {
     return { tools: [], gaps: [] }
   }
 
-  // Defense in depth — ALWAYS pull from every lane on the platform playbook.
+  // Defense in depth - ALWAYS pull from every lane on the platform playbook.
   // The use-case-to-lane map is a UI emphasis hint, not a filter.
   const tools: ToolCoverage[] = []
   for (const lane of ALL_LANES) {
     const steps = platform.playbook[lane] ?? []
     for (const step of steps) {
-      // Skip pure narrative "compensating control" entries from platforms.ts — those
+      // Skip pure narrative "compensating control" entries from platforms.ts - those
       // belong in the gaps column, not the Microsoft-tools column.
       if (/^compensating control/i.test(step.tool)) continue
       tools.push({
@@ -673,7 +673,7 @@ export function getLayeredCoverageForWorkload(workload: Workload, platform: Plat
     if (!stepAppliesToWorkload(g.appliesToWorkloads)) continue
     gapMap.set(g.gap, { ...g })
   }
-  // Layer on any explicit per-(use-case, platform) gap overrides from child use cases —
+  // Layer on any explicit per-(use-case, platform) gap overrides from child use cases -
   // they are more specific guidance than the generic platform gap.
   for (const ucId of workload.useCaseIds) {
     const override = explicitGaps[`${ucId}:${platform.id}`] ?? []

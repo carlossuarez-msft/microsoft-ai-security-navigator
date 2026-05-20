@@ -38,29 +38,29 @@ const workloadTitle: Record<WorkloadCategory, string> = {
 // One-line summary per workload. The "Microsoft 365" branding is spelled out fully here.
 const workloadSummary: Record<WorkloadCategory, string> = {
   chat:
-    'End-user chat assistants — Microsoft 365 Copilot, ChatGPT, Claude.ai, Gemini, Bing/Edge Copilot.',
+    'End-user chat assistants - Microsoft 365 Copilot, ChatGPT, Claude.ai, Gemini, Bing/Edge Copilot.',
   agents:
-    'Autonomous and semi-autonomous agents — Copilot agents, Copilot Studio, Foundry agents, Agent 365, 3rd-party agents.',
+    'Autonomous and semi-autonomous agents - Copilot agents, Copilot Studio, Foundry agents, Agent 365, 3rd-party agents.',
   apps:
-    'Custom GenAI applications your org ships — Foundry apps, Azure OpenAI apps, RAG apps, embedded Copilot in your product.',
+    'Custom GenAI applications your org ships - Foundry apps, Azure OpenAI apps, RAG apps, embedded Copilot in your product.',
   coding:
-    'Developer-facing AI — GitHub Copilot, Claude Code, Cursor, Codeium, Codex, Copilot for Azure.',
+    'Developer-facing AI - GitHub Copilot, Claude Code, Cursor, Codeium, Codex, Copilot for Azure.',
   'saas-embedded':
-    'AI quietly turned on inside 3rd-party SaaS — Notion AI, Slack AI, Einstein, Atlassian Intelligence, Now Assist, Zoom AI Companion.',
+    'AI quietly turned on inside 3rd-party SaaS - Notion AI, Slack AI, Einstein, Atlassian Intelligence, Now Assist, Zoom AI Companion.',
   plugins:
     'Copilot connectors, Copilot Studio actions, MCP servers, ChatGPT custom GPTs / Actions, Claude integrations.',
   infra:
-    'The hosting / model / API layer — Azure OpenAI, Foundry, model gateways, foundation model endpoints, model registry, training stores.',
+    'The hosting / model / API layer - Azure OpenAI, Foundry, model gateways, foundation model endpoints, model registry, training stores.',
   apis:
-    'Programmatic access — Anthropic API, OpenAI API, Azure OpenAI keys, agent-to-agent auth, MCP server auth.',
+    'Programmatic access - Anthropic API, OpenAI API, Azure OpenAI keys, agent-to-agent auth, MCP server auth.',
   data:
-    'The data going INTO models and RAG indexes — SharePoint grounding, custom embeddings, fine-tune datasets.',
+    'The data going INTO models and RAG indexes - SharePoint grounding, custom embeddings, fine-tune datasets.',
   shadow:
-    'Discover and govern AI the org never approved — browser-based, desktop apps, personal accounts.',
+    'Discover and govern AI the org never approved - browser-based, desktop apps, personal accounts.',
   'ai-threats':
-    'Defense against attackers using AI — AI-generated phishing, deepfakes, synthetic identity, prompt injection from external content.',
+    'Defense against attackers using AI - AI-generated phishing, deepfakes, synthetic identity, prompt injection from external content.',
   govern:
-    'Audit, eDiscovery, IRM, Compliance Manager — frameworks like NIST AI RMF, ISO/IEC 42001, EU AI Act.',
+    'Audit, eDiscovery, IRM, Compliance Manager - frameworks like NIST AI RMF, ISO/IEC 42001, EU AI Act.',
 }
 
 // Used on Step 2 to make the platform-picker heading specific to the workload.
