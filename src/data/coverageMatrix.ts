@@ -73,13 +73,24 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
       /inventory|admin center|registration|registry|catalog|govern|third[- ]party|publish|publication target/.test(`${t} ${a}`))
     return 'govern'
 
+  // Early govern rules for infra/posture surfaces - must beat app/identity matches downstream.
+  if (/azure policy/i.test(ctx)) return 'govern'
+  if (/ai[- ]spm|ai security posture management/i.test(ctx)) return 'govern'
+  if (/sovereign|residency|21vianet|government cloud/i.test(ctx)) return 'govern'
+  if (/catalog inventory|model card|policy review/i.test(ctx)) return 'govern'
+
+  // Detect precedence: when a step mentions Defender for Containers AND XDR/Sentinel,
+  // route to detect (SOC correlation intent) rather than endpoint.
+  if (/defender for containers/.test(ctx) && /defender (xdr|for cloud apps)|sentinel/i.test(ctx))
+    return 'detect'
+
   // 1) Endpoint & device - Intune, Defender for Endpoint, Endpoint DLP, AppLocker/WDAC, Edge browser mgmt.
   // Exception: Defender for Endpoint network protection / web content filtering is a network-egress
   // surface even though the agent runs on the endpoint - route those to network below.
   if (/defender for endpoint/.test(t) && /network protection|web content filtering|web filter|egress|network/.test(ctx)) {
     // fall through to network rule
   } else if (
-    /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|defender for containers|defender for app service|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
+    /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|defender for containers|defender for app service|defender for servers|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
       ctx,
     )
   )
@@ -101,10 +112,13 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   // 2) Network & edge - GSA web/internet filtering, Shadow-AI discovery, web content, DfCA web/cloud discovery,
   //    network protection, SSE/SASE, network DLP, firewall, egress
   if (
-    /web content filtering|internet access|network protection|shadow ai discovery|\bsse\b|\bsase\b|network data security|cloud app catalog|generative ai category|network egress|firewall|private endpoint|\begress\b/.test(
+    /web content filtering|internet access|network protection|shadow ai discovery|\bsse\b|\bsase\b|network data security|cloud app catalog|generative ai category|network egress|firewall|private endpoint|\begress\b|private cluster|network polic|vnet injection/.test(
       ctx,
     )
   )
+    return 'network'
+  // APIM private/VNet patterns → network (route before broad app rule that matches APIM).
+  if (/api management|\bapim\b/i.test(ctx) && /private endpoint|\bvnet\b|internal mode|vnet injection/i.test(ctx))
     return 'network'
   if (/global secure access|\bgsa\b/.test(t) && /web|shadow|internet|filter|discover|egress|network|category|claude|chat\.openai|traffic|forwarding|exchange|sharepoint|teams|microsoft.*profile/.test(a))
     return 'network'
@@ -113,7 +127,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
 
   // 3) Identity & access - Entra, Conditional Access, Agent 365, Entra Agent ID, Verified ID, SSO
   if (
-    /\bentra\b|conditional access|\bsso\b|\bsaml\b|agent 365|agent id|verified id|access review|managed identit|workload id/.test(
+    /\bentra\b|conditional access|\bsso\b|\bsaml\b|agent 365|agent id|verified id|access review|managed identit|workload id|\bazure rbac\b|\brbac\b.*role/.test(
       ctx,
     )
   )
@@ -131,7 +145,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   //    SharePoint Advanced Management, grounding/RAG data discovery
   if (/power platform dlp/i.test(t)) return 'data'
   if (
-    /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security|file polic|session polic/.test(
+    /purview dlp|sensitivity label|purview information protection|purview data map|data classification|trainable classifier|\bsit\b|dspm|data security posture|sharepoint advanced|grounding|sensitive[- ]data discovery|sensitive data discovery|browser extension|activity explorer|endpoint dlp|network data security|file polic|session polic|customer-managed key|\bcmk\b|data-privacy|abuse monitoring/.test(
       ctx,
     )
   )
