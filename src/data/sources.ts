@@ -628,4 +628,35 @@ export const sources: SourceRef[] = [
     status: 'Needs validation',
     note: 'US-only inference available at 1.1x pricing (API). claude.ai web data residency for Enterprise should be confirmed with Anthropic sales. Vendor doc.',
   },
+  {
+    id: 'prompt-shields',
+    title: 'Azure AI Content Safety - Prompt Shields (jailbreak and indirect prompt injection detection)',
+    url: 'https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection',
+    status: 'Official docs',
+  },
+  {
+    id: 'foundry-managed-vnet',
+    title: 'Configure a managed virtual network for Azure AI Foundry',
+    url: 'https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/configure-managed-network',
+    status: 'Official docs',
+    note: 'Covers `allow_only_approved_outbound`, approved FQDN list, and `disablePublicNetworkAccess`.',
+  },
+  {
+    id: 'foundry-private-link',
+    title: 'Configure Private Link for Azure AI Foundry',
+    url: 'https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/configure-private-link',
+    status: 'Official docs',
+  },
+  {
+    id: 'defender-containers',
+    title: 'Overview of Microsoft Defender for Containers',
+    url: 'https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-containers-introduction',
+    status: 'Official docs',
+  },
+  {
+    id: 'frontdoor-waf',
+    title: 'Web Application Firewall on Azure Front Door',
+    url: 'https://learn.microsoft.com/en-us/azure/web-application-firewall/afds/afds-overview',
+    status: 'Official docs',
+  },
 ]

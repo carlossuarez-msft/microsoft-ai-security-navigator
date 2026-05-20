@@ -78,7 +78,7 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
   if (/defender for endpoint/.test(t) && /network protection|web content filtering|web filter|egress|network/.test(ctx)) {
     // fall through to network rule
   } else if (
-    /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
+    /\bintune\b|\bwdac\b|\bapplocker\b|defender for endpoint|defender for containers|defender for app service|endpoint dlp|device compliance|edge for business|microsoft edge management|software inventory|discovered apps/.test(
       ctx,
     )
   )
@@ -134,6 +134,12 @@ function classifyToolToLayer(tool: string, action: string, fallbackLane: LaneKey
     )
   )
     return 'data'
+
+  // Govern-first: attack path analysis is a posture/governance surface, not application.
+  if (/attack path|attack[- ]path/.test(ctx)) return 'govern'
+
+  // App-first: GitHub Advanced Security / secret scanning protects application source code.
+  if (/github advanced security|secret scanning|\bghas\b/.test(ctx)) return 'app'
 
   // 5) App & workload - Content Safety, Prompt Shields, Azure OpenAI / Foundry,
   //    Key Vault for app secrets, APIM / model gateway. (Defender for AI Services moved to detect.)
