@@ -1385,7 +1385,7 @@ export const platforms: Platform[] = [
           tool: 'Microsoft Defender XDR',
           action: 'Stitch Entra + MDE + GSA telemetry around Codeium / Windsurf users.',
           status: 'GA',
-          appliesToWorkloads: ['coding'],
+          appliesToWorkloads: ['coding', 'ai-threats'],
         },
         {
           tool: 'GitHub Advanced Security - secret scanning + push protection',
@@ -5695,9 +5695,10 @@ export const platforms: Platform[] = [
       discover: [
         {
           tool: 'Microsoft Defender for Cloud - multi-cloud AWS connector + AI security posture',
-          action: 'Connect the AWS account; Defender CSPM automatically discovers Amazon Bedrock AI workloads and the AI BOM.',
-          status: 'GA',
-          appliesToWorkloads: ['agents', 'apps', 'govern'],
+          action: 'Connect the AWS account; Defender CSPM discovers Amazon Bedrock AI workloads and the AI BOM. The multi-cloud AWS connector is GA, but the AI security posture (AI-SPM) AI BOM / agent discovery for Bedrock is Preview as of 2026-05-19 - Microsoft Learn documents AI-SPM coverage for Azure OpenAI / Foundry first; cross-cloud Bedrock / Vertex AI-SPM is a Preview surface.',
+          status: 'Preview',
+          caveat: 'AWS multi-cloud connector itself is GA; the AI-SPM AI BOM / agent-discovery surface on AWS is Preview. Do not assume parity with the Azure OpenAI / Foundry AI-SPM coverage.',
+          appliesToWorkloads: ['agents', 'apps', 'govern', 'ai-threats'],
         },
         {
           tool: 'Microsoft Defender XDR - AI agent inventory (Bedrock)',
@@ -5765,8 +5766,9 @@ export const platforms: Platform[] = [
         },
         {
           tool: 'Microsoft Sentinel - AWS S3 (CloudTrail) connector',
-          action: 'Ingest Bedrock agent invocation logs via AWS CloudTrail to S3 into Sentinel; alert on anomalous tool invocations or wallet abuse.',
-          status: 'GA',
+          action: 'Ingest Bedrock agent invocation logs via AWS CloudTrail to S3 into Sentinel; alert on anomalous tool invocations or wallet abuse. The AWS S3 / CloudTrail connector ingestion is GA, but no first-party Sentinel content-hub solution or analytics pack for Bedrock AI threats exists - custom analytics rules (KQL on CloudTrail Bedrock InvokeModel events) are required.',
+          status: 'Validate',
+          caveat: 'Connector ingestion is GA; AI-threat analytics for Bedrock require custom KQL - no Sentinel content-hub AI solution for Bedrock exists today.',
           appliesToWorkloads: ['agents', 'apps', 'ai-threats'],
         },
       ],
@@ -5856,9 +5858,10 @@ export const platforms: Platform[] = [
       discover: [
         {
           tool: 'Microsoft Defender for Cloud - multi-cloud GCP connector + AI security posture',
-          action: 'Connect GCP; Defender CSPM automatically discovers Vertex AI workloads and the AI BOM.',
-          status: 'GA',
-          appliesToWorkloads: ['agents', 'apps', 'govern'],
+          action: 'Connect GCP; Defender CSPM discovers Vertex AI workloads and the AI BOM. The multi-cloud GCP connector is GA, but the AI security posture (AI-SPM) AI BOM / agent discovery for Vertex AI is Preview as of 2026-05-19 - Microsoft Learn documents AI-SPM coverage for Azure OpenAI / Foundry first; cross-cloud Bedrock / Vertex AI-SPM is a Preview surface.',
+          status: 'Preview',
+          caveat: 'GCP multi-cloud connector itself is GA; the AI-SPM AI BOM / agent-discovery surface on GCP is Preview. Do not assume parity with the Azure OpenAI / Foundry AI-SPM coverage.',
+          appliesToWorkloads: ['agents', 'apps', 'govern', 'ai-threats'],
         },
         {
           tool: 'Microsoft Defender XDR - AI agent inventory (Vertex AI)',
@@ -5926,8 +5929,9 @@ export const platforms: Platform[] = [
         },
         {
           tool: 'Microsoft Sentinel - GCP Pub/Sub Audit Logs connector',
-          action: 'Ingest Vertex AI agent invocation logs via GCP Audit Logs into Sentinel; alert on anomalous tool invocations.',
-          status: 'GA',
+          action: 'Ingest Vertex AI agent invocation logs via GCP Audit Logs into Sentinel; alert on anomalous tool invocations. The GCP Pub/Sub connector ingestion is GA, but no first-party Sentinel content-hub solution or analytics pack for Vertex AI threats exists - custom analytics rules (KQL on GCP Audit Logs Vertex events) are required.',
+          status: 'Validate',
+          caveat: 'Connector ingestion is GA; AI-threat analytics for Vertex AI require custom KQL - no Sentinel content-hub AI solution for Vertex exists today.',
           appliesToWorkloads: ['agents', 'apps', 'ai-threats'],
         },
       ],
